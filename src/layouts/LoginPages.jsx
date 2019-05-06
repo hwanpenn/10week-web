@@ -14,7 +14,7 @@ import pagesRoutes from "routes/loginPages.jsx";
 
 import pagesStyle from "assets/jss/material-dashboard-pro-react/layouts/pagesStyle.jsx";
 
-import bgImage from "../assets/img/login.jpg";
+import bgImage from "../assets/img/login.jpeg";
 
 
 class LoginPages extends Component {

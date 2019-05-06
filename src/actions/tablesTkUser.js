@@ -26,7 +26,7 @@ export const GET_FAIL_TkUser_OTHER = "GET_FAIL_TkUser_OTHER";
 export function getOtherTkUser(params) {
     return {
         types: [GET_REQUEST_TkUser_OTHER, GET_SUCCESS_TkUser_OTHER, GET_FAIL_TkUser_OTHER],
-        promise: client => client.get('/api/club',{params: params}),
+        promise: client => client.get('/api/indexcoach',{params: params}),
         afterSuccess:(dispatch,getState,response)=>{
             /*请求成功后执行的函数*/
         },
@@ -37,7 +37,7 @@ export function getOtherTkUser(params) {
 export function getDataTkUser(params) {
     return {
         types: [GET_REQUEST_TkUser, GET_SUCCESS_TkUser, GET_FAIL_TkUser],
-        promise: client => client.get('/api/student',{params: params}),
+        promise: client => client.get('/api/user',{params: params}),
         afterSuccess:(dispatch,getState,response)=>{
             /*请求成功后执行的函数*/
         },
@@ -56,6 +56,7 @@ export function createDataTkUser(params) {
                     pageSize:10,
                 };
                 dispatch(getDataTkUser(params));
+                dispatch(getOtherTkUser(params));
             }else {
                 message.info(response.data.msg);
             }
@@ -74,6 +75,7 @@ export function updateDataTkUser(params) {
                     pageSize:10,
                 };
                 dispatch(getDataTkUser(params));
+                dispatch(getOtherTkUser(params));
             }else {
                 message.info(response.data.msg);
             }

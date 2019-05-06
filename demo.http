@@ -31,20 +31,47 @@ put http://127.0.0.1:7001/api/pushMsg/5ba5a4690856980949a64d65 HTTP/1.1
 content-type: application/json
 
 {
-     "name": "南昌俱乐部11",
-      "city": "南昌11",
-      "status":"0"
+    "search": "",
+            "pageNo": 1,
+            "pageSize": 7
 }
 
 ###
 
-get http://127.0.0.1:7001/api/pushMsg/5ba5a4690856980949a64d65 HTTP/1.1
+get http://127.0.0.1:7001/api/news?pageNo=1&pageSize=2 HTTP/1.1
 content-type: application/json
+
+{
+    "search": "",
+            "pageNo": 1,
+            "pageSize": 7
+}
 
 ###
 
-get http://127.0.0.1:7001/api/pushMsg HTTP/1.1
+get http://127.0.0.1:7001/api/taskbyday HTTP/1.1
 content-type: application/json
+
+
+###
+###
+
+get http://127.0.0.1:7001/api/taskbyday?day=1 HTTP/1.1
+content-type: application/json
+
+
+###
+###
+
+get http://127.0.0.1:7001/api/recipebyday HTTP/1.1
+content-type: application/json
+
+
+###
+
+get http://127.0.0.1:7001/api/recipebyday?day=1 HTTP/1.1
+content-type: application/json
+
 
 ###
 
@@ -265,21 +292,21 @@ content-type: application/json
 
 ###
 
-get http://127.0.0.1:7001/api/baseData/5ba5a4690856980949a64d65 HTTP/1.1
+get http://127.0.0.1:7001/api/vipData HTTP/1.1
 content-type: application/json
 
 ###
 
-get http://127.0.0.1:7001/api/baseData HTTP/1.1
+get http://127.0.0.1:7001/api/vipData?user=5cae98d7cc5b0468cbc3af8b HTTP/1.1
 content-type: application/json
 
 ###
 
-delete http://127.0.0.1:7001/api/baseData HTTP/1.1
+delete http://127.0.0.1:7001/api/vipData HTTP/1.1
 content-type: application/json
 
 {
-     "id": "5ba9b0928c1a1c0d16acb77e,5ba9b08a8c1a1c0d16acb77d"
+     "id": "5cbbf0fd4e1c9e1ed4152f20,5cbbf2cbe92fa91eeec89dbb"
 }
 
 
@@ -555,13 +582,15 @@ content-type: application/json
 
 ###
 
-get http://127.0.0.1:7001/api/role/5ba5a4690856980949a64d65 HTTP/1.1
+get http://127.0.0.1:7001/api/user/5cae98d7cc5b0468cbc3af8b HTTP/1.1
 content-type: application/json
 
 ###
 
-get http://127.0.0.1:7001/api/role HTTP/1.1
+get http://127.0.0.1:7001/api/vipData?pageNo=1&pageSize=2 HTTP/1.1
 content-type: application/json
+
+
 
 ###
 
@@ -628,8 +657,13 @@ content-type: application/json
 
 ###
 
-get http://127.0.0.1:7001/api/club HTTP/1.1
+get http://127.0.0.1:7001/api/club?pageNo=1&pageSize=2 HTTP/1.1
 content-type: application/json
+
+{
+    "pageNo": 1,
+"pageSize": 1
+}
 
 ###
 
@@ -691,7 +725,7 @@ content-type: application/json
 
 ###
 
-get http://127.0.0.1:7001/api/area HTTP/1.1
+get http://127.0.0.1:7001/api/vipData HTTP/1.1
 content-type: application/json
 
 ###
@@ -704,10 +738,27 @@ content-type: application/json
 }
 
 ###############################################
-GET http://127.0.0.1:7001/api/user1 HTTP/1.1
+GET http://f8fitness.com.cn/api HTTP/1.1
 
 ###
+
+###############################################
+GET http://f8fitness.com.cn/api/user HTTP/1.1
+
+###
+###############################################
 GET http://127.0.0.1:7001/api/user HTTP/1.1
+
+###
+###############################################
+GET http://f8fitness.com.cn/test/12 HTTP/1.1
+
+###
+###############################################
+GET http://f8fitness.com.cn/api/test HTTP/1.1
+
+###
+GET http://127.0.0.1:7001/api/user/5cae98d7cc5b0468cbc3af8b HTTP/1.1
 
 ###
 GET http://127.0.0.1:7001/api/admin HTTP/1.1

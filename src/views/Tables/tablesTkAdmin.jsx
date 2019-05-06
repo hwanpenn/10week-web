@@ -50,12 +50,15 @@ class tablesTkAdmin extends React.Component {
     componentDidMount(){
     }
     getTableData = (search,start,size) => {
-        // const params = {
-        //     search:search,
-        //     pageNo:start,
-        //     pageSize:size,
-        // };
-        this.props.getDataTkAdmin(this.params);
+        const params = {
+            search:search,
+            pageNo:start,
+            pageSize:size,
+        };
+        this.setState({
+            current:start
+        })
+        this.props.getDataTkAdmin(params);
     }
     getOtherData = (username,start,size) => {
         const params = {

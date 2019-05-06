@@ -13,7 +13,7 @@ import {updatePasswordDataTkUser,getOtherTkUser,getDataTkUser,updateDataTkUser,d
 import {connect} from "react-redux";
 import {Table, Divider,Button } from 'antd';
 import {Input,Modal } from 'antd';
-import {Form,Pagination,Popconfirm,Select ,Popover} from 'antd';
+import {Form,Pagination,Popconfirm,Select ,Popover,Radio} from 'antd';
 import { LocaleProvider } from 'antd';
 import zh_CN from "antd/lib/locale-provider/zh_CN";
 
@@ -21,6 +21,7 @@ const FormItem = Form.Item;
 const Search = Input.Search;
 const Option = Select.Option;
 const { TextArea } = Input;
+const RadioGroup = Radio.Group;
 
 
 class tablesTkUser extends React.Component {
@@ -41,7 +42,7 @@ class tablesTkUser extends React.Component {
         search:'',
         pageNo:1,
         pageSize:10,
-        club:''
+        vip:''
     };
     componentWillMount(){
         this.getTableData('',1,10);
@@ -50,11 +51,12 @@ class tablesTkUser extends React.Component {
     componentDidMount(){
     }
     getTableData = (search,start,size) => {
-        // const params = {
-        //     search:search,
-        //     pageNo:start,
-        //     pageSize:size,
-        // };
+        this.params.search=search
+        this.params.pageNo=start
+        this.params.pageSize=size
+        this.setState({
+            current:start
+        })
         this.props.getDataTkUser(this.params);
     }
     getOtherData = (username,start,size) => {
@@ -74,18 +76,17 @@ class tablesTkUser extends React.Component {
     }
     handleSelect = (value) => {
         if(value==='all'){
-            this.params.club=''
+            this.params.vip=''
         }else{
-            this.params.club=value
+            this.params.vip=value
         }
-        
         this.getTableData();
     }
     onRowSelect = (record) => {
         this.setState({ recordSelect:record });
     }
     showModifyModal = (record) => {
-        this.setState({ visibleModify: true,recordAction:record,_id:record.club._id });
+        this.setState({ visibleModify: true,recordAction:record,_id:'' });
     }
     showModalCreate = () => {
         this.setState({ visible: true });
@@ -102,6 +103,16 @@ class tablesTkUser extends React.Component {
             if (err) {
                 return;
             }
+            if(values.coachNameAndId!==undefined&&values.coachNameAndId!==''){
+                let arr=values.coachNameAndId.split('-')
+                values.coachId = arr[0]
+                values.coachName = arr[1]
+                // console.log(`coachId ${values.coachId}`);
+                // console.log(`coachName ${values.coachName}`);
+            }else{
+                values.coachId = ''
+                values.coachName = ''
+            }
             values.id=this.state.recordAction._id
             this.props.updateDataTkUser(values);
             form.resetFields();
@@ -114,7 +125,22 @@ class tablesTkUser extends React.Component {
             if (err) {
                 return;
             }
-            values.role = 'user'
+            if(values.isCoach==='coach'){
+                values.role = 'coach'
+            }else{
+                values.role = 'user'
+                if(values.coachNameAndId!==undefined&&values.coachNameAndId!==''){
+                    let arr=values.coachNameAndId.split('-')
+                    values.coachId = arr[0]
+                    values.coachName = arr[1]
+                    // console.log(`coachId ${values.coachId}`);
+                    // console.log(`coachName ${values.coachName}`);
+                }else{
+                    values.coachId = ''
+                    values.coachName = ''
+                }
+            }
+            console.log(values)
             this.props.createDataTkUser(values)
             form.resetFields();
             this.setState({ visible: false });
@@ -132,11 +158,64 @@ class tablesTkUser extends React.Component {
         }
         this.props.deleteDataTkUser(params)
     }
+    handleBase = (record) => {
+        const params = {
+            id:record._id,
+        }
+        this.props.history.push("/mobile/basedatapage/"+record._id);
+        // this.props.deleteDataTkUser(params)
+    }
+    handleList = (record) => {
+        const params = {
+            id:record._id,
+        }
+        this.props.history.push("/mobile/vipdatalistpage/"+record._id);
+        // this.props.deleteDataTkUser(params)
+    }
+    handleChart = (record) => {
+        const params = {
+            id:record._id,
+        }
+        this.props.history.push("/mobile/chartpage/"+record._id);
+        // this.props.deleteDataTkUser(params)
+    }
+    handleVip = (record) => {
+        const params = {
+            id:record._id,
+        }
+        if(record.vip==="false"){
+            let values ={}
+            values.id=record._id
+            values.vip="true"
+            this.props.updateDataTkUser(values);
+        }else{
+            this.props.history.push("/mobile/vipdatapage/"+record._id);
+        }
+        
+        // this.props.deleteDataTkUser(params)
+    }
+    deleteConfirm = (record) => {
+        const params = {
+            id:record._id,
+        }
+        this.props.deleteDataTkUser(params)
+    }
     resetConfirm = (record) => {
         const params = {
             id:record._id,
         }
         this.props.updatePasswordDataTkUser(params)
+    }
+    handleChange = (value) => {
+        console.log(`selected ${value}`);
+        let arr=value.split('-')
+        // values.coachId = arr[0]
+        // values.coachName = arr[1]
+        this.params.coachName=arr[1]
+        this.getTableData()
+        // this.props.form.setFieldsValue({
+        //     categoryId: value,
+        // });
     }
     render() {
         let thisTemp = this
@@ -145,7 +224,7 @@ class tablesTkUser extends React.Component {
             title: '用户名',
             dataIndex: 'realName',
             key: 'realName',
-            width: '20%',
+            width: '10%',
             // fixed: 'left',
             render: text => <a >{text}</a>,
         }, {
@@ -153,20 +232,30 @@ class tablesTkUser extends React.Component {
             dataIndex: 'mobile',
             key: 'mobile',
             // align: 'center'
-            width: '20%'
-        }, {
-            title: '所属俱乐部',
-            dataIndex: 'club',
-            key: 'club',
+            width: '13%'
+        }, 
+        {
+            title: '会员状态',
+            dataIndex: 'vip',
+            key: 'vip',
             // align: 'center'
-            width: '20%',
-            render: text => {return text===null?'空':text.name},
-        }, {
+            width: '10%',
+            render: text => {return text==="false"?'游客':"会员"},
+        }, 
+        {
+            title: '教练名',
+            dataIndex: 'coachName',
+            key: 'coachName',
+            // align: 'center'
+            width: '10%',
+            render: text => {return text?text:"无"},
+        }, 
+        {
             title: '描述',
             dataIndex: 'extra',
             key: 'extra',
             // align: 'center'
-            width: '20%',
+            width: '10%',
             // render: text => {return text.name},
             render: text => <Popover content={(
                 <div style={{width:270}}>
@@ -177,17 +266,25 @@ class tablesTkUser extends React.Component {
                     textOverflow: 'ellipsis',
                     whiteSpace: 'nowrap',
                     display: 'inline-block',
-                    width: 270
+                    width: 170
                 }}>{text}</span>
           </Popover>
         },  {
             title: '操作',
             key: 'action',
-            width: '20%',
+            width: '38%',
             // fixed: 'right',
             render: (text, record) => {
                     return (
                         <span>
+                            <a onClick={() => this.handleBase(record)} >基础</a>
+                            <Divider type="vertical" />
+                            <a onClick={() => this.handleList(record)} >列表</a>
+                            <Divider type="vertical" />
+                            <a onClick={() => this.handleChart(record)} >可视化</a>
+                            <Divider type="vertical" />
+                            <a onClick={() => this.handleVip(record)} >{record.vip==="false"?"升级会员":"打卡"}</a>
+                            <Divider type="vertical" />
                             <a onClick={() => this.showModifyModal(record)} >修改</a>
                             <Divider type="vertical" />
                             <Popconfirm cancelText="取消" okText="确定" title="确定重置?" onConfirm={() => this.resetConfirm(record)}>
@@ -202,33 +299,45 @@ class tablesTkUser extends React.Component {
             },
         }];
         let options = ''
+        console.log(this.props.tablesTkUser.responseOtherTkUser.rows)
         if(this.props.tablesTkUser.responseOtherTkUser.rows!==undefined){
              options = this.props.tablesTkUser.responseOtherTkUser.rows.map((item,i) => {
-                return <Option value={item._id}>{item.name}</Option>
+                return <Option value={item._id+"-"+item.realName}>{item.realName}</Option>
             })
         }
         
         const CollectionCreateForm = Form.create()(
             class extends React.Component {
+                state={
+                    valueRadio:'user',
+                    valueRadio01:'no'
+                }
                 handleChange = (value) => {
-                    console.log(`selected ${value}`);
+                    
                     this.props.form.setFieldsValue({
-                        categoryId: value,
+                        coachNameAndId: value,
                     });
                 }
-                handleBlur = () => {
-                console.log('blur');
-                }
-                handleFocus = () => {
-                console.log('focus');
-                }
+                onChangeRadio = (e) => {
+                    console.log('radio checked', e.target.value);
+                    this.setState({
+                        valueRadio: e.target.value,
+                    });
+                  }
+                onChangeRadio01 = (e) => {
+                    console.log('radio checked', e.target.value);
+                    this.setState({
+                        valueRadio01: e.target.value,
+                    });
+                  }
                 render() {
+                    const thisTemp = this
                     const { visible, onCancel, onCreate, form } = this.props;
                     const { getFieldDecorator } = form;
                     return (
                         <Modal
                             visible={visible}
-                            title="新增管理员"
+                            title="新增用户"
                             cancelText="取消" okText="确定"
                             onCancel={onCancel}
                             onOk={onCreate}
@@ -247,7 +356,7 @@ class tablesTkUser extends React.Component {
                                 <FormItem label="密码">
                                     {getFieldDecorator('password')(<Input type="password" />)}
                                 </FormItem>
-                                <FormItem label="所属俱乐部">
+                                {/* <FormItem label="所属俱乐部">
                                     {getFieldDecorator('club', {
                                         rules: [{ required: true, message: '请输入修改所属俱乐部!' }],
                                     })(
@@ -263,7 +372,46 @@ class tablesTkUser extends React.Component {
                                             {options}
                                         </Select>
                                     )}
+                                </FormItem> */}
+                                <FormItem label="用户角色">
+                                    {getFieldDecorator('isCoach', {
+                                        initialValue:  thisTemp.state.valueRadio ,
+                                        rules: [{ required: false, message: '请选择用户角色!' }],
+                                    })(
+                                        <RadioGroup onChange={this.onChangeRadio} >
+                                            <Radio value={'user'}>学员</Radio>
+                                            <Radio value={'coach'}>教练</Radio>
+                                        </RadioGroup>
+                                    )}
                                 </FormItem>
+                                {this.state.valueRadio==='user'?<FormItem label="是否分配教练">
+                                    {getFieldDecorator('whichCoach', {
+                                        initialValue:  thisTemp.state.valueRadio01 ,
+                                        rules: [{ required: false, message: '是否分配教练!' }],
+                                    })(
+                                        <RadioGroup onChange={this.onChangeRadio01} >
+                                            <Radio value={'no'}>否</Radio>
+                                            <Radio value={'yes'}>是</Radio>
+                                        </RadioGroup>
+                                    )}
+                                </FormItem>:''}
+                                {this.state.valueRadio01==='yes'?<FormItem label="选择所属教练">
+                                    {getFieldDecorator('coachNameAndId', {
+                                        rules: [{ required: false, message: '请选择所属教练!' }],
+                                    })(
+                                        <Select
+                                            showSearch
+                                            placeholder="教练名称"
+                                            optionFilterProp="children"
+                                            onChange={this.handleChange}
+                                            onFocus={this.handleFocus}
+                                            onBlur={this.handleBlur}
+                                            filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
+                                        >
+                                            {options}
+                                        </Select>
+                                    )}
+                                </FormItem>:''}
                                 <FormItem label="描述">
                                     {getFieldDecorator('extra', {
                                         rules: [{ required: false, message: '请输入新增用户描述!' }],
@@ -297,7 +445,7 @@ class tablesTkUser extends React.Component {
                     return (
                         <Modal
                             visible={visible}
-                            title="修改管理员"
+                            title="修改用户"
                             cancelText="取消" okText="确定"
                             onCancel={onCancel}
                             onOk={onCreate}
@@ -317,7 +465,7 @@ class tablesTkUser extends React.Component {
                                         rules: [{ required: true, message: '请输入修改用户别名!' }],
                                     })(<Input type="textarea" />)}
                                 </FormItem>
-                                <FormItem label="所属俱乐部">
+                                {/* <FormItem label="所属俱乐部">
                                     {getFieldDecorator('club', {
                                         initialValue:  thisTemp.state._id ,
                                         rules: [{ required: true, message: '请输入修改所属俱乐部!' }],
@@ -331,6 +479,25 @@ class tablesTkUser extends React.Component {
                                             onBlur={this.handleBlur}
                                             filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
                                         >
+                                            {options}
+                                        </Select>
+                                    )}
+                                </FormItem> */}
+                                <FormItem label="选择所属教练">
+                                    {getFieldDecorator('coachNameAndId', {
+                                        initialValue:  thisTemp.state.recordAction.coachId+'-'+thisTemp.state.recordAction.coachName ,
+                                        rules: [{ required: false, message: '请选择所属教练!' }],
+                                    })(
+                                        <Select
+                                            showSearch
+                                            placeholder="教练名称"
+                                            optionFilterProp="children"
+                                            onChange={this.handleChange}
+                                            onFocus={this.handleFocus}
+                                            onBlur={this.handleBlur}
+                                            filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
+                                        >
+                                            <Option value={''}>{'空'}</Option>
                                             {options}
                                         </Select>
                                     )}
@@ -355,26 +522,43 @@ class tablesTkUser extends React.Component {
                     <Card>
                         <CardHeader color="rose" icon>
                             <Grid container spacing={24}>
-                                <Grid item xs={6}>
+                                <Grid item xs={3}>
                                     <CardIcon color="rose">
                                         <Assignment />
                                     </CardIcon>
                                     <h4 className={classes.cardIconTitle}> </h4>
                                 </Grid>
-                                <Grid style={{textAlign:'right',marginTop:10}} item xs={6}>
+                                <Grid style={{textAlign:'right',marginTop:10}} item xs={9}>
                                         <Select
-                                            style={{    width: '32%',paddingRight: 10}}
+                                            style={{    width: 200,paddingRight: 10}}
                                             showSearch
-                                            placeholder="所有区域"
+                                            placeholder="教练名称"
+                                            optionFilterProp="children"
+                                            onChange={this.handleChange}
+                                            onFocus={this.handleFocus}
+                                            onBlur={this.handleBlur}
+                                            filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
+                                        >
+                                            <Option value={''}>{'空'}</Option>
+                                            {options}
+                                        </Select>
+                                 
+
+                                        <Select
+                                            style={{    width: 200,paddingRight: 10}}
+                                            showSearch
+                                            placeholder="是否会员"
                                             optionFilterProp="children"
                                             onChange={this.handleSelect}
                                             // onFocus={this.handleFocus}
                                             // onBlur={this.handleBlur}
                                             filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
                                         >
-                                            <Option value={'all'}>{'所有俱乐部'}</Option>
-                                            {options}
+                                            <Option value={'all'}>{'所有'}</Option>
+                                            <Option value={'true'}>{'会员'}</Option>
+                                            <Option value={'false'}>{'非会员'}</Option>
                                         </Select>
+
                                     <Search
                                         placeholder="名称搜索"
                                         onSearch={value => this.handleSearch(value)}
@@ -392,7 +576,7 @@ class tablesTkUser extends React.Component {
                                     // onMouseEnter: () => {},  
                                     };
                                 }} key={"tablesTkUser"} pagination={false} columns={columns} dataSource={this.props.tablesTkUser.tableDataTkUser} scroll={{x: 600, y: 360}} />
-                            <Pagination defaultCurrent={1} defaultPageSize={10} total={this.props.tablesTkUser.tableCountTkUser} style={{textAlign:'right',marginTop:25}}  onChange={(page, pageSize)=>this.handlePageChange(page)}/>
+                            {/* <Pagination defaultCurrent={1} defaultPageSize={10} total={this.props.tablesTkUser.tableCountTkUser} style={{textAlign:'right',marginTop:25}}  onChange={(page, pageSize)=>this.handlePageChange(page)}/> */}
                             <LocaleProvider locale={zh_CN}>
                                 <Pagination  current={this.state.current} showTotal={total => `总共 ${total} 条`} showSizeChanger showQuickJumper defaultPageSize={10} total={this.props.tablesTkUser.tableCountTkUser} style={{textAlign:'right',marginTop:25}}  onShowSizeChange={(current, pageSize)=>this.getTableData('',current, pageSize)} onChange={(page, pageSize)=>this.getTableData('',page,pageSize)}/>
                             </LocaleProvider>

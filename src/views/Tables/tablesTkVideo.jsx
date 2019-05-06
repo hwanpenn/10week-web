@@ -49,17 +49,22 @@ class tablesTkVideo extends React.Component {
     url=''
     componentWillMount(){
         this.getTableData('',1,10);
-        this.getOtherData('',1,10);
+        // this.getOtherData('',1,10);
     }
     componentDidMount(){
+        // this.video.load()
+        // alert("11")
     }
     getTableData = (search,start,size) => {
-        // const params = {
-        //     search:search,
-        //     pageNo:start,
-        //     pageSize:size,
-        // };
-        this.props.getDataTkVideo(this.params);
+        const params = {
+            search:search,
+            pageNo:start,
+            pageSize:size,
+        };
+        this.setState({
+            current:start
+        })
+        this.props.getDataTkVideo(params);
     }
     getOtherData = (username,start,size) => {
         const params = {
@@ -94,6 +99,9 @@ class tablesTkVideo extends React.Component {
     showModalCreate = () => {
         this.setState({ visible: true });
     }
+    showModalList = () => {
+        this.props.history.push("/mobile/videopagelist")
+    }
     handleCancelModify = () => {
         this.setState({ visibleModify: false });
     }
@@ -107,6 +115,11 @@ class tablesTkVideo extends React.Component {
                 return;
             }
             values.id=this.state.recordAction._id
+            values.url=this.url
+            values.img=this.urlimg
+            console.log('values--------------')
+            console.log(this.urlimg)
+            console.log(values)
             this.props.updateDataTkVideo(values);
             form.resetFields();
             this.setState({ visibleModify: false });
@@ -118,6 +131,7 @@ class tablesTkVideo extends React.Component {
             if (err) {
                 return;
             }
+            values.img=this.urlimg
             values.url=this.url
             this.props.createDataTkVideo(values)
             form.resetFields();
@@ -154,6 +168,14 @@ class tablesTkVideo extends React.Component {
           visibleVideo: true,
           url:record.url
         });
+        // console.log(document.getElementsByClassName("rh5v-DefaultPlayer_video")[0])
+        const video =  document.getElementsByClassName("rh5v-DefaultPlayer_video")[0]
+        if(video===undefined){
+
+        }else{
+            video.load()
+        }
+        // document.getElementsByClassName("rh5v-DefaultPlayer_video")[0].load()
       }
     
       handleOkVideo = (e) => {
@@ -177,8 +199,17 @@ class tablesTkVideo extends React.Component {
             dataIndex: 'createdAt',
             key: 'createdAt',
             // align: 'center'
-            width: '25%'
-        }, {
+            width: '15%'
+        }, 
+        {
+            title: '视频图片',
+            dataIndex: 'img',
+            key: 'img',
+            // align: 'center'
+            width: '10%',
+            render: text => <img style={{ height: '20px', marginRight: '0px' }} src={text?text:"https://zos.alipayobjects.com/rmsportal/dKbkpPXKfvZzWCM.png"} alt="" />,
+            // render: text => <a >{text}</a>,
+        },{
             title: '描述',
             dataIndex: 'extra',
             key: 'extra',
@@ -260,8 +291,29 @@ class tablesTkVideo extends React.Component {
                           }
                         },
                       };
+                      const propsimg = {
+                        name: 'file',
+                        action: '/api/upload',
+                        headers: {
+                        //   authorization: 'authorization-text',
+                        },
+                        onChange(info) {
+                          if (info.file.status !== 'uploading') {
+                            console.log(info.file, info.fileList);
+                          }
+                          if (info.file.status === 'done') {
+                            console.log(info.file.response)
+                            thisTemp.urlimg=info.file.response.data.url
+                            message.success(`${info.file.name} 上传成功`);
+                          } else if (info.file.status === 'error') {
+                            message.error(`${info.file.name} 上传失败.`);
+                          }
+                        },
+                      };
                     return (
                         <Modal
+                        width={1000}
+                            zIndex={9999}
                             visible={visible}
                             title="新增视频"
                             cancelText="取消" okText="确定"
@@ -274,6 +326,17 @@ class tablesTkVideo extends React.Component {
                                         rules: [{ required: true, message: '请输入新增视频名称!' }],
                                     })(
                                         <Input placeholder="" />
+                                    )}
+                                </FormItem>
+                                <FormItem label="视频图片">
+                                    {getFieldDecorator('file', {
+                                        rules: [{ required: false, message: '请选择标题图片!' }],
+                                    })(
+                                        <Upload {...propsimg}>
+                                            <Button>
+                                            <Icon type="upload" /> 上传图片
+                                            </Button>
+                                        </Upload>
                                     )}
                                 </FormItem>
                                 <FormItem label="描述">
@@ -317,8 +380,49 @@ class tablesTkVideo extends React.Component {
                 render() {
                     const { visible, onCancel, onCreate, form } = this.props;
                     const { getFieldDecorator } = form;
+                    const props = {
+                        name: 'file',
+                        action: '/api/upload',
+                        headers: {
+                        //   authorization: 'authorization-text',
+                        },
+                        onChange(info) {
+                          if (info.file.status !== 'uploading') {
+                            console.log(info.file, info.fileList);
+                          }
+                          if (info.file.status === 'done') {
+                            // console.log(info.file.response.data.url)
+                            thisTemp.url=info.file.response.data.url
+                            message.success(`${info.file.name} 上传成功`);
+                          } else if (info.file.status === 'error') {
+                            message.error(`${info.file.name} 上传失败.`);
+                          }
+                        },
+                      };
+                    const propsimg = {
+                        name: 'file',
+                        action: '/api/upload',
+                        headers: {
+                        //   authorization: 'authorization-text',
+                        },
+                        onChange(info) {
+                          if (info.file.status !== 'uploading') {
+                            console.log(info.file, info.fileList);
+                          }
+                          if (info.file.status === 'done') {
+                            // console.log(info.file.response)
+                            // console.log(info.file.response.data.url)
+                            thisTemp.urlimg=info.file.response.data.url
+                            message.success(`${info.file.name} 上传成功`);
+                          } else if (info.file.status === 'error') {
+                            message.error(`${info.file.name} 上传失败.`);
+                          }
+                        },
+                      };
                     return (
                         <Modal
+                        width={1000}
+                            zIndex={9999}
                             visible={visible}
                             title="修改"
                             cancelText="取消" okText="确定"
@@ -332,6 +436,28 @@ class tablesTkVideo extends React.Component {
                                         rules: [{ required: true, message: '请输入修改视频名称!' }],
                                     })(
                                         <Input />
+                                    )}
+                                </FormItem>
+                                <FormItem label="视频图片">
+                                    {getFieldDecorator('img', {
+                                        rules: [{ required: false, message: '请选择标题图片!' }],
+                                    })(
+                                        <Upload {...propsimg}>
+                                            <Button>
+                                            <Icon type="upload" /> 上传图片
+                                            </Button>
+                                        </Upload>
+                                    )}
+                                </FormItem>
+                                <FormItem label="上传视频">
+                                    {getFieldDecorator('url', {
+                                        rules: [{ required: false, message: '请输入新增用户描述!' }],
+                                    })(
+                                        <Upload {...props}>
+                                            <Button>
+                                            <Icon type="upload" /> 上传视频
+                                            </Button>
+                                        </Upload>
                                     )}
                                 </FormItem>
                                 <FormItem label="描述">
@@ -368,6 +494,7 @@ class tablesTkVideo extends React.Component {
                                             borderWidth:0,paddingRight:10 }}
                                     />
                                     <Button onClick={this.showModalCreate} style={{ height: 30,marginRight:10 }} size={'small'}>增加</Button>
+                                    <Button onClick={this.showModalList} style={{ height: 30,marginRight:10 }} size={'small'}>列表</Button>
                                 </Grid>
                             </Grid>
                         </CardHeader>
@@ -403,7 +530,7 @@ class tablesTkVideo extends React.Component {
                     onCancel={this.handleCancelVideo}
                     footer={null}
                     >
-                     <Video autoPlay loop 
+                     <Video loop 
                     controls={['PlayPause', 'Seek', 'Time', 'Volume', 'Fullscreen']}
                     poster=""
                     onCanPlayThrough={() => {

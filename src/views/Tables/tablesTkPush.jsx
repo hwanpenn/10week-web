@@ -47,6 +47,9 @@ class tablesTkPush extends React.Component {
             pageNo:start,
             pageSize:size,
         };
+        this.setState({
+            current:start
+        })
         this.props.getDataTkPush(params);
     }
     getOtherData = (username,start,size) => {

@@ -35,7 +35,7 @@ const dashRoutes2 = [
                 name: "数据统计",
                 mini: "GS",
                 component: Dashboard
-                },
+            },
         ]
       },
     {

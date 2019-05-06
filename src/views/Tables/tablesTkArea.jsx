@@ -47,6 +47,9 @@ class tablesTkArea extends React.Component {
             pageNo:start,
             pageSize:size,
         };
+        this.setState({
+            current:start
+        })
         this.props.getDataTkArea(params);
     }
     getOtherData = (username,start,size) => {

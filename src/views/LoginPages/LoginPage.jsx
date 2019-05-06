@@ -100,7 +100,7 @@ class LoginPage extends React.Component {
                 // window.sessionStorage.setItem('userId',response.data._id)
                 window.sessionStorage.setItem('username',response.data.realName)
                 window.sessionStorage.setItem('token',response.data.token)
-                window.sessionStorage.setItem('role',response.data.role.access)
+                window.sessionStorage.setItem('role',response.data.role)
                 window.sessionStorage.setItem('roleName',response.data.role.name)
   
                 //window.sessionStorage.setItem('publicKey',response.data.publicKey)
@@ -111,7 +111,13 @@ class LoginPage extends React.Component {
                 // window.sessionStorage.setItem('customerFlag',response.data.customerFlag)
   
                 window.sessionStorage.setItem('password','')
-                thisTemp.props.history.push("/cms/home");
+
+                if(response.data.role==="admin"){
+                  thisTemp.props.history.push("/cms/home");
+                }else{
+                  message.info("权限不足");
+                }
+                
                 // document.getElementById("layui-layer2").style.display='block'
             }else {
                 message.info(response.data.msg);

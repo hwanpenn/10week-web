@@ -1,7 +1,23 @@
+import OfficialHomePage from "layouts/OfficialHomePage.jsx";
+import MobilePage from "layouts/MobilePage.jsx";
 import LoginPages from "layouts/LoginPages.jsx";
 import HomePages from "layouts/HomePages.jsx";
 
 const indexRoutes = [
+  {
+    path: "/official",
+    name: "officialHome ",
+    short: "officialHome",
+    mini: "OP",
+    component: OfficialHomePage
+},
+  {
+    path: "/mobile",
+    name: "mobileHome ",
+    short: "mobileHome",
+    mini: "MP",
+    component: MobilePage
+},
     {
         path: "/cms/login",
         name: "Login ",
@@ -23,7 +39,7 @@ const indexRoutes = [
     //   name: "Register"
     // },
     {
-      path: "*",
+      path: "/cms",
       redirect: true,
       pathTo: "/cms/login",
       name: "Register"

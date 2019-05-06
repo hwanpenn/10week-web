@@ -9,7 +9,7 @@ const initState = {
     responseCreateTkUser:'',
     responseUpdateTkUser:'',
     responseDeleteTkUser:'',
-    responseOtherTkUser:'',
+    responseOtherTkUser:[],
     tableDataTkUser:'',
     tableCountTkUser:'',
     tablesTkUser:''

@@ -49,6 +49,9 @@ class tablesAdmin extends React.Component {
             pageNo:start,
             pageSize:size,
         };
+        this.setState({
+            current:start
+        })
         this.props.getDataAdmin(params);
     }
     getOtherData = (username,start,size) => {

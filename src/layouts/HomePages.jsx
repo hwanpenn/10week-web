@@ -78,7 +78,7 @@ class HomePages extends React.Component {
       }else {
       }
       const role = window.sessionStorage.getItem('role');
-      if(role==='ROLE_SUPERADMIN'){
+      if(role==='admin'){
         pageRoutes=adminPages
         switchRoutes=adminRoutes
       }

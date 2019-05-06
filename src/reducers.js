@@ -12,6 +12,8 @@ import tablesTkAdmin from './reducers/tablesTkAdmin.js'
 import tablesTkCoach from './reducers/tablesTkCoach.js'
 import tablesTkUser from './reducers/tablesTkUser.js'
 import tablesTkVideo from './reducers/tablesTkVideo.js'
+import tablesTkNews from './reducers/tablesTkNews.js'
+import tablesTkTask from './reducers/tablesTkTask.js'
 import tablesTkRecipe from './reducers/tablesTkRecipe.js'
 import {combineReducers} from 'redux'
 
@@ -30,6 +32,8 @@ export default combineReducers({
     tablesTkCoach,
     tablesTkUser,
     tablesTkVideo,
+    tablesTkNews,
+    tablesTkTask,
     tablesTkRecipe,
     
 })
