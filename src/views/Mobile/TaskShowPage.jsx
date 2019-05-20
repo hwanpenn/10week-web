@@ -1,32 +1,9 @@
 import React from "react";
 import PropTypes from "prop-types";
 import withStyles from "@material-ui/core/styles/withStyles";
-import InputAdornment from "@material-ui/core/InputAdornment";
-
-import Face from "@material-ui/icons/Face";
-
-import GridContainer from "components/Grid/GridContainer.jsx";
-import GridItem from "components/Grid/GridItem.jsx";
-import CustomInput from "components/CustomInput/CustomInput.jsx";
-import { Button,Breadcrumb } from 'antd';
-import Card from "components/Card/Card.jsx";
-import CardBody from "components/Card/CardBody.jsx";
-import CardHeader from "components/Card/CardHeader.jsx";
-import CardFooter from "components/Card/CardFooter.jsx";
-
 import mobilePageStyle from "assets/jss/material-dashboard-pro-react/views/mobilePageStyle.jsx";
-import LockOpen from "@material-ui/icons/LockOpen";
-// import axios from 'axios';
-// import axios from '../../Utils/axios';
 import { message } from 'antd';
-import VCode from '../../variables/VCode'
-import {canvas} from '../../variables/VCode'
 import cx from "classnames";
-import logo from "assets/img/android.png";
-// import shineyueLogo from "assets/img/logoRule.png";
-import shineyueLogo from "assets/img/icon03.png";
-import logo1 from "assets/img/ios.png";
-// import logo1 from "assets/img/icon.png";
 import axios from 'axios';
 import { NavBar, Icon } from 'antd-mobile';
 import 'antd-mobile/dist/antd-mobile.css';
@@ -39,6 +16,7 @@ let  publicKey = 'MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCEzFQe2lrG++hcZDkbrZstjn
 
 message.config({
     duration: 1,
+    top:100
 });
 
 let documentObj =''
@@ -140,25 +118,25 @@ class TaskShowPage extends React.Component {
         return (
 <div>
             <div  style={{textAlign:'center'}}>
-      <NavBar
+      <NavBar style={{zIndex: 9999, position: "fixed",left: 0,top: 0,width: "100%"}}
                     mode="light"
-                    icon={<Icon onClick={this.goBack} type="left" />}
-                    onLeftClick={() => console.log('onLeftClick')}
+                    leftContent={[
+                      <a onClick={this.goBack}  style={{ marginRight: '6px' }} >返回首页</a>,
+                    ]}
                     rightContent={[
                         <a onClick={this.goto}  style={{ marginRight: '6px' }} >今日食谱</a>,
                         
                     ]}
-                    >十周挑战排行榜</NavBar>
+                    >每日任务</NavBar>
                 </div>
-            <div style={{padding: '20px'}} >
+            <div style={{padding: '20px',marginTop:40}} >
                 {/* <div className={classes.header}>
                     <img src={shineyueLogo} className={}></img>
                 </div> */}
 
-                <h2 style={{marginTop:10}}>{this.state.title}</h2>
+                <h2 style={{marginTop:10,fontSize: 22,lineHeight: 1.4,marginBottom: 14}}>{this.state.title}</h2>
                 
-                {this.state.author+"   "+this.state.createdAt}
-
+                <pre><span style={{fontSize: 15,color: "rgb(178, 178, 178)"}}>{this.state.author+"   "+this.state.createdAt}</span></pre>
                 <div style={{marginTop:20}} dangerouslySetInnerHTML={{
               __html: this.state.content
             }}/>

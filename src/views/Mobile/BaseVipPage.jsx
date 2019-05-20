@@ -1,45 +1,22 @@
 import React from "react";
-import PropTypes from "prop-types";
 import withStyles from "@material-ui/core/styles/withStyles";
-import InputAdornment from "@material-ui/core/InputAdornment";
-
-import Face from "@material-ui/icons/Face";
-
-import GridContainer from "components/Grid/GridContainer.jsx";
-import GridItem from "components/Grid/GridItem.jsx";
-import CustomInput from "components/CustomInput/CustomInput.jsx";
-import { Button,Breadcrumb } from 'antd';
-import Card from "components/Card/Card.jsx";
-import CardBody from "components/Card/CardBody.jsx";
-import CardHeader from "components/Card/CardHeader.jsx";
-import CardFooter from "components/Card/CardFooter.jsx";
-
+import { Button } from 'antd';
 import mobilePageStyle from "assets/jss/material-dashboard-pro-react/views/mobilePageStyle.jsx";
-import LockOpen from "@material-ui/icons/LockOpen";
-// import axios from 'axios';
-// import axios from '../../Utils/axios';
 import { message } from 'antd';
-import VCode from '../../variables/VCode'
 import './style.css'
-import {canvas} from '../../variables/VCode'
-import cx from "classnames";
-import logo from "assets/img/android.png";
-// import shineyueLogo from "assets/img/logoRule.png";
-import shineyueLogo from "assets/img/icon03.png";
-import logo1 from "assets/img/ios.png";
-// import logo1 from "assets/img/icon.png";
 import axios from 'axios';
 import { NavBar, Icon as IconM } from 'antd-mobile';
 import 'antd-mobile/dist/antd-mobile.css';
 
 import {
-    Form, Select, InputNumber, Switch, Radio,
-    Slider, Upload, Icon, Rate, Checkbox,Input,DatePicker,
-    Row, Col,
+    Form, Select, InputNumber, 
+    Slider, Upload, Icon, Rate,Input,
   } from 'antd';
   
   const { Option } = Select;
-
+  message.config({
+    top: 100
+  });
 
 // import 'jsencrypt';
 class BaseVipPage extends React.Component {
@@ -51,35 +28,28 @@ class BaseVipPage extends React.Component {
 }
 
     handleSubmit = (e) => {
-      e.preventDefault();
-      this.props.form.validateFields((err, values) => {
-        if (!err) {
-          console.log('Received values of form: ', values);
-          values.user=this.props.match.params.id
-          values.picture=this.urlimg
-          values.vipDay=this.state.data.vipDay+1
-          values.name="第"+(this.state.data.vipDay+1)+"天打卡数据"
-          console.log("values")
-          console.log(values)
-          if(values.vipDay===61){
-            message.info("会员结束");
-            let params = {}
-            params.vip = "false"
-            params.vipDay = '0'
-            this.endVip(params)
-          }
-          // alert(parseInt(3/7))
-          if(parseInt(values.vipDay%7)===0){
-            if(values.picture===undefined){
-              message.info("每周必须上传一张照片");
-            }else{
-              this.update(values)
-              }
-          }else{
-            this.update(values)
-            }
-        }
-      });
+      message.info('此通道已过期');
+      // e.preventDefault();
+      // this.props.form.validateFields((err, values) => {
+      //   if (!err) {
+      //     console.log('Received values of form: ', values);
+      //     values.user=this.props.match.params.id
+      //     values.picture=this.urlimg
+      //     values.vipDay=this.state.data.vipDay+1
+      //     values.name="第"+(this.state.data.vipDay+1)+"次打卡数据"
+      //     console.log("values")
+      //     console.log(values)
+      //     if(values.vipDay===61){
+      //       message.info("会员结束");
+      //       let params = {}
+      //       params.vip = "false"
+      //       params.vipDay = '0'
+      //       this.endVip(params)
+      //     }
+      //     // alert(parseInt(3/7))
+          
+      //   }
+      // });
     }
 
     endVip = (params) => {
@@ -212,9 +182,11 @@ goto = () => {
       return (
         <div>
         <div  style={{textAlign:'center'}}>
-        <NavBar
+        <NavBar style={{zIndex: 9999, position: "fixed",left: 0,top: 0,width: "100%"}}
                       mode="light"
-                      icon={<IconM onClick={this.goBack} type="left" />}
+                      leftContent={[
+                      <a onClick={this.goBack}  style={{ marginRight: '6px' }} >返回首页</a>,
+                    ]}
                       onLeftClick={() => console.log('onLeftClick')}
                       rightContent={[
                           <a onClick={this.goto}  style={{ marginRight: '6px' }} >历史数据</a>,
@@ -222,7 +194,7 @@ goto = () => {
                       ]}
                       >每日打卡记录</NavBar>
                   </div>
-        <div style={{padding: '20px',margin:'0 auto', maxWidth: 677}}>
+        <div style={{padding: '20px',margin:'47px auto', maxWidth: 677}}>
                 <div  style={{textAlign:'center'}}>
                  <h3>第{this.state.data.vipDay+1}天打卡</h3>
                 </div>
@@ -470,7 +442,7 @@ goto = () => {
           <Form.Item
             wrapperCol={{ span: 12, offset: 6 }}
           >
-            <Button type="primary" htmlType="submit">Submit</Button>
+            <Button type="primary" htmlType="submit">确认打卡</Button>
           </Form.Item>
         </Form>
         </div>

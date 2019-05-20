@@ -1,85 +1,106 @@
 import React from "react";
 import PropTypes from "prop-types";
 import withStyles from "@material-ui/core/styles/withStyles";
-import InputAdornment from "@material-ui/core/InputAdornment";
-
-import Face from "@material-ui/icons/Face";
-
-import GridContainer from "components/Grid/GridContainer.jsx";
-import GridItem from "components/Grid/GridItem.jsx";
-import CustomInput from "components/CustomInput/CustomInput.jsx";
-import { Button,Breadcrumb } from 'antd';
-import Card from "components/Card/Card.jsx";
-import CardBody from "components/Card/CardBody.jsx";
-import CardHeader from "components/Card/CardHeader.jsx";
-import CardFooter from "components/Card/CardFooter.jsx";
-
 import mobilePageStyle from "assets/jss/material-dashboard-pro-react/views/mobilePageStyle.jsx";
-import LockOpen from "@material-ui/icons/LockOpen";
-// import axios from 'axios';
-// import axios from '../../Utils/axios';
 import { message } from 'antd';
-import VCode from '../../variables/VCode'
-import {canvas} from '../../variables/VCode'
-import cx from "classnames";
-import logo from "assets/img/android.png";
-// import shineyueLogo from "assets/img/logoRule.png";
-import shineyueLogo from "assets/img/icon03.png";
-import logo1 from "assets/img/ios.png";
-// import logo1 from "assets/img/icon.png";
 import axios from 'axios';
-import { DefaultPlayer as Video } from 'react-html5video';
-
 import InfiniteLoader from 'react-infinite-loader'
-import ReactDOM from 'react-dom'
 import  { Component } from 'react'
-import { NavBar, Icon } from 'antd-mobile';
+import { NavBar, Icon,PullToRefresh } from 'antd-mobile';
 import 'antd-mobile/dist/antd-mobile.css';
+import { Pagination } from 'antd-mobile';
+
+const locale = {
+  prevText: '上一页',
+  nextText: '下一页',
+};
 
 message.config({
   duration: 1,
+  top:100
 });
 
 let page = 0
 class VideoListPage extends Component {
     constructor(props) {
         super(props)
-        this.state = { items: [] }
+        this.state = { 
+          items: [] ,
+          totalPage:1,
+          pageNo:1,
+          refreshing: false,
+          down: true,
+          // height: 812,
+          height: document.documentElement.clientHeight,
+          data: [],
+        }
       }
 
   componentDidMount() {
-    page=0
-    this.loadItems()
+    if(this.state.height===0){
+      window.location.reload()
+    }
+    this.loadItems(1)
   }
 
-  loadItems() {
+  loadItems(pageNo) {
+    // console.log(page)
     axios.get('/api/news',{params:{
-      pageNo: page+1,
-      pageSize: 8}}
+      pageNo: pageNo,
+      pageSize: 10}}
       ).then( (response) => {
           if(response.data.data.rows.length===0){
               message.info("没有数据了");
           }else{
              let data = response.data.data.rows
-             setTimeout( () => {
-              let items = this.state.items.slice()
-              items = items.concat(data)
-              console.log("items")
-              console.log(items)
-              page++
-              this.setState({ items: items })
-            }, 1000)
-            //  items.push(data)
+             console.log("data-----",data)
+             this.setState({ 
+              items: data ,
+              pageNo: pageNo ,
+              totalPage:parseInt(response.data.data.total/10)+1,
+            })
           }
           })
     .catch(function (error) {
         console.log(error);
     });
-
     /* just simulating a load of more items from an api here */
-    
   }
 
+  refreshing() {
+    this.setState({ refreshing: true });
+    setTimeout(() => {
+      this.setState({ refreshing: false });
+    }, 1000);
+    // console.log(page)
+    axios.get('/api/news',{params:{
+      pageNo: this.state.pageNo,
+      pageSize: 10}}
+      ).then( (response) => {
+          if(response.data.data.rows.length===0){
+              message.info("没有数据了");
+          }else{
+             let data = response.data.data.rows
+             this.setState({ 
+              items: data ,
+              totalPage:parseInt(response.data.data.total/10)+1,
+            })
+          }
+          })
+    .catch(function (error) {
+        console.log(error);
+    });
+    /* just simulating a load of more items from an api here */
+  }
+
+  loadprev (pageNo) {
+      this.loadItems(pageNo)
+  }
+  loadnext () {
+    if(this.state.pageNo<this.state.totalPage){
+      this.loadItems(this.state.pageNo+1)
+    }
+  }
   handleVisit () {
     this.loadItems()
   }
@@ -91,37 +112,6 @@ class VideoListPage extends Component {
   }
   
   getItems() {
-    // let items = []
-    // let pIndex =0
-
-    // axios.get('/api/news',{params:{
-    //   pageNo: pIndex+1,
-    //   pageSize: 8}}
-    //   ).then( (response) => {
-    //       if(response.data.data.rows.length===0){
-    //           // alert('没有数据了~',1);
-    //           message.info("没有数据了");
-    //       }else{
-    //          let data = response.data.data.rows
-    //          items.push(data)
-    //       }
-          
-      
-    //       })
-    // .catch(function (error) {
-    //     console.log(error);
-    // });
-
-
-
-
-    // let items = []
-    // for(var i = 0; i < 10; i++) {
-    //   items.push({ name: 'An item  '+ (page*10 +i) })
-    // }
-    // page++
-    // // console.log()
-    // return items
   }
 
   renderCards() {
@@ -132,8 +122,9 @@ class VideoListPage extends Component {
                 <div onClick={()=>this.handleTouch(obj._id)} style={{ display: '-webkit-box', display: 'flex', padding: '15px 0' }}>
                   <img style={{ height: '64px', marginRight: '15px' }} src={obj.url?obj.url:"https://zos.alipayobjects.com/rmsportal/dKbkpPXKfvZzWCM.png"} alt="" />
                   <div style={{ lineHeight: 1 }}>
-                    <a  style={{ marginBottom: '8px', fontWeight: 'bold' }}>{obj.name}</a>
+                    <a  style={{ marginBottom: '8px', fontWeight: 'bold' ,color:'black'}}>{obj.name}</a>
                     <div><span style={{ fontSize: '30px', color: '#FF6E27' }}></span> {"发布日期： "+obj.createdAt}</div>
+                    {/* <div><span style={{ fontSize: '30px', color: '#FF6E27' }}></span> {"发布日期： "+obj.createdAt}</div> */}
                   </div>
                 </div>
 
@@ -154,7 +145,8 @@ class VideoListPage extends Component {
     // this.props.history.push("/mobile/ranklistpage");
 }
 goto = () => {
-    const page = this.state.page
+  // window.location.reload()
+    // const page = this.state.page
     // this.props.history.push("/cms/home/tables/killgroup?page="+page);
     this.props.history.push("/mobile/videopagelist");
     // this.setState({ visible: true });
@@ -163,23 +155,31 @@ goto = () => {
   render () {
     return (
       <div >
-      <div >
-      <NavBar
+      <NavBar style={{zIndex:9999,position: "fixed",left: 0,top: 0,width: "100%"}}
                     mode="light"
-                    icon={<Icon onClick={this.goBack} type="left" />}
-                    onLeftClick={() => console.log('onLeftClick')}
+                    leftContent={[
+                      <a onClick={this.goBack}  style={{ marginRight: '6px' }} >返回首页</a>,
+                    ]}
                     rightContent={[
-                        <a onClick={this.goto}  style={{ marginRight: '6px' }} >健身视频</a>,
-                        
+                        <a onClick={this.goto}  style={{ marginRight: '6px' }} >健身视频</a>, 
                     ]}
                     >健身新闻</NavBar>
-      </div>
-
-<div style={{padding: '20px'}}>
-{ this.renderCards() }
-        <InfiniteLoader onVisited={ () => this.handleVisit() } />
-</div>
-       
+    <PullToRefresh
+        damping={60}
+        ref={el => this.ptr = el}
+        style={{
+          height: this.state.height,
+          overflow: 'auto',
+          padding: '20px',marginTop:40
+        }}
+        indicator={this.state.down ? {} : { deactivate: '上拉可以刷新' }}
+        direction={this.state.down ? 'down' : 'up'}
+        refreshing={this.state.refreshing}
+        onRefresh={() => this.refreshing()}
+      >
+        { this.renderCards() }
+        <Pagination style={{paddingTop: 20,paddingBottom: 40}} onChange={(pageNo)=>this.loadprev(pageNo)} total={this.state.totalPage} current={this.state.pageNo} locale={locale} />
+      </PullToRefresh>
       </div>
     )
   }

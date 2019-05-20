@@ -1,96 +1,104 @@
 import React from "react";
 import PropTypes from "prop-types";
 import withStyles from "@material-ui/core/styles/withStyles";
-import InputAdornment from "@material-ui/core/InputAdornment";
-
-import Face from "@material-ui/icons/Face";
-
-import GridContainer from "components/Grid/GridContainer.jsx";
-import GridItem from "components/Grid/GridItem.jsx";
-import CustomInput from "components/CustomInput/CustomInput.jsx";
-import { Button,Breadcrumb } from 'antd';
-import Card from "components/Card/Card.jsx";
-import CardBody from "components/Card/CardBody.jsx";
-import CardHeader from "components/Card/CardHeader.jsx";
-import CardFooter from "components/Card/CardFooter.jsx";
-
 import mobilePageStyle from "assets/jss/material-dashboard-pro-react/views/mobilePageStyle.jsx";
-import LockOpen from "@material-ui/icons/LockOpen";
-// import axios from 'axios';
-// import axios from '../../Utils/axios';
 import { message } from 'antd';
-import VCode from '../../variables/VCode'
-import {canvas} from '../../variables/VCode'
-import cx from "classnames";
-import logo from "assets/img/android.png";
-// import shineyueLogo from "assets/img/logoRule.png";
-import shineyueLogo from "assets/img/icon03.png";
-import logo1 from "assets/img/ios.png";
-// import logo1 from "assets/img/icon.png";
 import axios from 'axios';
-
 import { DefaultPlayer as Video } from 'react-html5video';
 import 'react-html5video/dist/styles.css';
-// import 'reset-css/reset.css'
-import styles from './App.css';
-import vttEn from './assets/sintel-en.vtt';
-import vttEs from './assets/sintel-es.vtt';
-import bigBuckBunnyPoster from './assets/poster-big-buck-bunny.png';
-import sintelTrailerPoster from './assets/poster-sintel-trailer.png';
 import { NavBar, Icon } from 'antd-mobile';
 import 'antd-mobile/dist/antd-mobile.css';
-
-
 import InfiniteLoader from 'react-infinite-loader'
-import ReactDOM from 'react-dom'
 import  { Component } from 'react'
+import { Pagination,PullToRefresh } from 'antd-mobile';
 
 
 const sintelTrailer = 'https://download.blender.org/durian/trailer/sintel_trailer-720p.mp4';
 const bigBuckBunny = 'http://download.blender.org/peach/bigbuckbunny_movies/big_buck_bunny_480p_h264.mov';
 
+const locale = {
+  prevText: '上一页',
+  nextText: '下一页',
+};
+
 message.config({
   duration: 1,
+  top:100
 });
 
 let page = 0
 class VideoListPage extends Component {
     constructor(props) {
         super(props)
-        this.state = { items: [] }
+        this.state = { 
+          items: [] ,
+          totalPage:1,
+          pageNo:1,
+          refreshing: false,
+          down: true,
+          // height: 812,
+          height: document.documentElement.clientHeight,
+          data: [],
+        }
       }
 
   componentDidMount() {
+    if(this.state.height===0){
+      window.location.reload()
+    }
     this.loadItems()
   }
 
-  loadItems() {
+  loadItems(pageNo) {
     axios.get('/api/video',{params:{
-      pageNo: page+1,
-      pageSize: 4}}
+      pageNo: pageNo,
+      pageSize: 3}}
       ).then( (response) => {
           if(response.data.data.rows.length===0){
               message.info("没有数据了");
           }else{
-             let data = response.data.data.rows
-             setTimeout( () => {
-              let items = this.state.items.slice()
-              items = items.concat(data)
-              console.log("items")
-              console.log(items)
-              page++
-              this.setState({ items: items })
-            }, 1000)
-            //  items.push(data)
+            let data = response.data.data.rows
+            this.setState({ 
+             items: data ,
+             pageNo: pageNo ,
+             totalPage:parseInt(response.data.data.total/3)+1,
+           })
           }
           })
     .catch(function (error) {
         console.log(error);
     });
-
-    /* just simulating a load of more items from an api here */
-    
   }
+
+  refreshing() {
+    this.setState({ refreshing: true });
+    setTimeout(() => {
+      this.setState({ refreshing: false });
+    }, 1000);
+    // console.log(page)
+    axios.get('/api/video',{params:{
+      pageNo: this.state.pageNo,
+      pageSize: 3}}
+      ).then( (response) => {
+          if(response.data.data.rows.length===0){
+              message.info("没有数据了");
+          }else{
+            let data = response.data.data.rows
+            this.setState({ 
+             items: data ,
+             totalPage:parseInt(response.data.data.total/3)+1,
+           })
+          }
+          })
+    .catch(function (error) {
+        console.log(error);
+    });
+    /* just simulating a load of more items from an api here */
+  }
+
+  loadprev (pageNo) {
+    this.loadItems(pageNo)
+}
 
   handleVisit () {
     this.loadItems()
@@ -106,95 +114,27 @@ class VideoListPage extends Component {
   }
 
   getItems() {
-    // let items = []
-    // let pIndex =0
-
-    // axios.get('/api/news',{params:{
-    //   pageNo: pIndex+1,
-    //   pageSize: 8}}
-    //   ).then( (response) => {
-    //       if(response.data.data.rows.length===0){
-    //           // alert('没有数据了~',1);
-    //           message.info("没有数据了");
-    //       }else{
-    //          let data = response.data.data.rows
-    //          items.push(data)
-    //       }
-          
-      
-    //       })
-    // .catch(function (error) {
-    //     console.log(error);
-    // });
-
-
-
-
-    // let items = []
-    // for(var i = 0; i < 10; i++) {
-    //   items.push({ name: 'An item  '+ (page*10 +i) })
-    // }
-    // page++
-    // // console.log()
-    // return items
   }
-
-  // <Video loop 
-  // controls={['PlayPause', 'Seek', 'Time', 'Volume', 'Fullscreen']}
-  // poster=""
-  // onCanPlayThrough={() => {
-  //     // Do stuff
-  // }}>
-  // {/* <source src={item.url?item.url:"/uploads/5cb49b7542966cf0d7e6738f.mp4"} type="video/webm" /> */}
-  // <source src={'http://127.0.0.1:3000/uploads/5cb49b7542966cf0d7e6738f.mp4'} type="video/webm" />
-  // <track label="English" kind="subtitles" srcLang="en" src="" default />
-  //         </Video>
-  // <h3>{item.name}</h3>
-  // <h4 style={{textAlign:"right"}}>{"日期： "+item.createdAt}</h4>
  
 
   renderCards() {
     const { items } = this.state
     const cards = items.map((item, i) => {
-      return (
-        // <div style={{padding:"0px 15px"}} key={i}>
-        //             <li className={styles.videoListItem}>
-        //                 <Video
-        //                     autoPlay
-        //                     ref={"video"+i}
-        //                     onPlay={() => this.handlePlay(i)}
-        //                     poster={item.img?item.img:"/uploads/5cc80284140502a8435b8d92.png"}
-        //                     >
-        //                     {/* <source src={item.url?item.url:"/uploads/5cb49b7542966cf0d7e6738f.mp4"} type="video/mp4" /> */}
-        //                     <source src={'https://download.blender.org/durian/trailer/sintel_trailer-720p.mp4'} type="video/mp4" />
-        //                     {/* <track
-        //                         label="English"
-        //                         kind="subtitles"
-        //                         srcLang="en"
-        //                         src={vttEn}
-        //                         default />
-        //                     <track
-        //                         label="Español"
-        //                         kind="subtitles"
-        //                         srcLang="es"
-        //                         src={vttEs} /> */}
-        //                 </Video>
-        //             </li>
-        // </div>
-        <div style={{padding:"0px 15px"}} key={i} >
-         <Video
-            //  autoPlay
-             ref={"video"+i}
-             onPlay={() => this.handlePlay(i)}
-             poster={item.img?item.img:"/uploads/5cc80284140502a8435b8d92.png"}
-             >
-             <source src={item.url?item.url:"/uploads/5cb49b7542966cf0d7e6738f.mp4"} type="video/mp4" />
-         </Video>
-           <p>{item.name}</p>
-            <p style={{textAlign:"right"}}>{"日期： "+item.createdAt}</p>
-            </div>
-      )
-
+        return (
+          <div style={{padding:"0px 15px"}} key={i} >
+           <Video
+              //  autoPlay
+               ref={"video"+i}
+               onPlay={() => this.handlePlay(i)}
+               poster={item.img?item.img:"/uploads/5cc80284140502a8435b8d92.png"}
+               >
+               <source src={item.url?item.url:"/uploads/5cb49b7542966cf0d7e6738f.mp4"} type="video/mp4" />
+           </Video>
+             <p style={{marginTop:4}}>{item.name}</p>
+              <p style={{textAlign:"right"}}>{"日期： "+item.createdAt}</p>
+            
+              </div>
+        )
     })
     return cards
   }
@@ -210,7 +150,7 @@ class VideoListPage extends Component {
     // this.props.history.push("/mobile/ranklistpage");
 }
 goto = () => {
-    const page = this.state.page
+    // const page = this.state.page
     // this.props.history.push("/cms/home/tables/killgroup?page="+page);
     this.props.history.push("/mobile/newspagelist");
     // this.setState({ visible: true });
@@ -219,24 +159,33 @@ goto = () => {
   render () {
     return (
       <div>
-<div  style={{textAlign:'center'}}>
-      <NavBar
+
+              <NavBar style={{zIndex:9999,position: "fixed",left: 0,top: 0,width: "100%"}}
                     mode="light"
-                    icon={<Icon onClick={this.goBack} type="left" />}
-                    onLeftClick={() => console.log('onLeftClick')}
+                    leftContent={[
+                      <a onClick={this.goBack}  style={{ marginRight: '6px' }} >返回首页</a>,
+                    ]}
                     rightContent={[
                         <a onClick={this.goto}  style={{ marginRight: '6px' }} >健身新闻</a>,
                         
                     ]}
                     >健身视频</NavBar>
-                </div>
-                <div  style={{padding: '20px'}}></div>
-
-                <div style={{padding: '20px'}}>
-
-{ this.renderCards() }
-<InfiniteLoader onVisited={ () => this.handleVisit() } />
-</div>
+                <PullToRefresh
+                  damping={60}
+                  ref={el => this.ptr = el}
+                  style={{
+                    height: this.state.height,
+                    overflow: 'auto',
+                    padding: '20px',marginTop:40
+                  }}
+                  indicator={this.state.down ? {} : { deactivate: '上拉可以刷新' }}
+                  direction={this.state.down ? 'down' : 'up'}
+                  refreshing={this.state.refreshing}
+                  onRefresh={() => this.refreshing()}
+                >
+                  { this.renderCards() }
+                  <Pagination style={{paddingTop: 20,paddingBottom: 40}} onChange={(pageNo)=>this.loadprev(pageNo)} total={this.state.totalPage} current={this.state.pageNo} locale={locale} />
+                </PullToRefresh>
       </div>
       
      

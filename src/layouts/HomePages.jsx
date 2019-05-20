@@ -8,13 +8,29 @@ import withStyles from "@material-ui/core/styles/withStyles";
 import Header from "components/Header/Header.jsx";
 import Footer from "components/Footer/Footer.jsx";
 import Sidebar from "components/Sidebar/Sidebar.jsx";
-import homePages from "routes/homePages.jsx";
+// import homePages from "routes/homePages.jsx";
 import adminPages from "routes/adminPages.jsx";
-import centerPages from "routes/centerPages.jsx";
+// import centerPages from "routes/centerPages.jsx";
 import appStyle from "assets/jss/material-dashboard-pro-react/layouts/dashboardStyle.jsx";
 import image from "assets/img/sidebar-2.jpg";
 // import logo from "assets/img/shineyuelogo.png";
 import logo from "assets/img/icon.png";
+// import AsyncComponent from './asyncComponent.jsx';
+
+// const AsynctablesTkUser = asyncComponent(() => import("views/Tables/tablesTkUser.jsx"));
+// const AsynctablesTkNews = asyncComponent(() => import("views/Tables/tablesTkNews.jsx"));
+
+// const Loading = function () {
+//   return <div>Loading...</div>
+// };
+
+// const createComponent = (component) => (props) => (
+//   <Bundle load={component}>
+//       {
+//           (Component) => Component ? <Component {...props} /> : <Loading/>
+//       }
+//   </Bundle>
+// );
 
 const role = window.sessionStorage.getItem('role');
 const adminRoutes = (
@@ -25,45 +41,45 @@ const adminRoutes = (
       if (prop.collapse)
         return prop.views.map((prop, key) => {
           return (
-            <Route path={prop.path} component={prop.component} key={key} />
+            <Route path={prop.path} component={(prop.component)} key={key} />
           );
         });
-      return <Route path={prop.path} component={prop.component} key={key} />;
+      return <Route path={prop.path} component={(prop.component)} key={key} />;
     })}
   </Switch>
 );
-const homeRoutes = (
-  <Switch>
-    {homePages.map((prop, key) => {
-      if (prop.redirect)
-        return <Redirect from={prop.path} to={prop.pathTo} key={key} />;
-      if (prop.collapse)
-        return prop.views.map((prop, key) => {
-          return (
-            <Route path={prop.path} component={prop.component} key={key} />
-          );
-        });
-      return <Route path={prop.path} component={prop.component} key={key} />;
-    })}
-  </Switch>
-);
-const centerRoutes = (
-  <Switch>
-    {homePages.map((prop, key) => {
-      if (prop.redirect)
-        return <Redirect from={prop.path} to={prop.pathTo} key={key} />;
-      if (prop.collapse)
-        return prop.views.map((prop, key) => {
-          return (
-            <Route path={prop.path} component={prop.component} key={key} />
-          );
-        });
-      return <Route path={prop.path} component={prop.component} key={key} />;
-    })}
-  </Switch>
-);
-let switchRoutes = homeRoutes
-let pageRoutes = homePages
+// const homeRoutes = (
+//   <Switch>
+//     {homePages.map((prop, key) => {
+//       if (prop.redirect)
+//         return <Redirect from={prop.path} to={prop.pathTo} key={key} />;
+//       if (prop.collapse)
+//         return prop.views.map((prop, key) => {
+//           return (
+//             <Route path={prop.path} component={(prop.component)} key={key} />
+//           );
+//         });
+//       return <Route path={prop.path} component={(prop.component)} key={key} />;
+//     })}
+//   </Switch>
+// );
+// const centerRoutes = (
+//   <Switch>
+//     {homePages.map((prop, key) => {
+//       if (prop.redirect)
+//         return <Redirect from={prop.path} to={prop.pathTo} key={key} />;
+//       if (prop.collapse)
+//         return prop.views.map((prop, key) => {
+//           return (
+//             <Route path={prop.path} component={prop.component} key={key} />
+//           );
+//         });
+//       return <Route path={prop.path} component={prop.component} key={key} />;
+//     })}
+//   </Switch>
+// );
+let switchRoutes = adminPages
+let pageRoutes = adminRoutes
 let timer2
 
 var ps;
@@ -90,8 +106,8 @@ class HomePages extends React.Component {
         // alert('用户模块未加载')
         // pageRoutes=adminPages
         // switchRoutes=adminRoutes
-        pageRoutes=homePages
-        switchRoutes=homeRoutes
+        pageRoutes=adminPages
+        switchRoutes=adminRoutes
       }
   }
   state = {

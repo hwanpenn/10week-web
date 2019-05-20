@@ -11,9 +11,9 @@ import CardHeader from "components/Card/CardHeader.jsx";
 import extendedTablesStyle from "assets/jss/material-dashboard-pro-react/views/extendedTablesStyle.jsx";
 import {getOtherTkRole,getDataTkRole,updateDataTkRole,deleteDataTkRole,createDataTkRole } from "actions/tablesTkRole";
 import {connect} from "react-redux";
-import {Table, Divider,Button } from 'antd';
+import {Table,  } from 'antd';
 import {Input,Modal } from 'antd';
-import {Form,Pagination,Popconfirm,Select,Radio,Popover } from 'antd';
+import {Form,Pagination,Select,Radio } from 'antd';
 import { LocaleProvider } from 'antd';
 import zh_CN from "antd/lib/locale-provider/zh_CN";
 

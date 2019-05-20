@@ -191,15 +191,38 @@ class tablesTkVideo extends React.Component {
             title: '视频名称',
             dataIndex: 'name',
             key: 'name',
-            width: '20%',
+            width: '15%',
             // fixed: 'left',
-            render: text => <a >{text}</a>,
+            render: text => <Popover content={(
+                <div style={{width:270}}>
+                  <p>{text}</p>
+                </div>
+              )}>
+             <span style={{overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                    whiteSpace: 'nowrap',
+                    display: 'inline-block',
+                    width: 150
+                }}>{text}</span>
+          </Popover>
         }, {
             title: '上传时间',
             dataIndex: 'createdAt',
             key: 'createdAt',
             // align: 'center'
-            width: '15%'
+            width: '15%',
+            render: text => <Popover content={(
+                <div style={{width:270}}>
+                  <p>{text}</p>
+                </div>
+              )}>
+             <span style={{overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                    whiteSpace: 'nowrap',
+                    display: 'inline-block',
+                    width: 150
+                }}>{text}</span>
+          </Popover>
         }, 
         {
             title: '视频图片',
@@ -214,7 +237,7 @@ class tablesTkVideo extends React.Component {
             dataIndex: 'extra',
             key: 'extra',
             // align: 'center',
-            width: '25%',
+            width: '20%',
             render: text => <Popover content={(
                 <div style={{width:270}}>
                   <p>{text}</p>
@@ -283,7 +306,7 @@ class tablesTkVideo extends React.Component {
                             console.log(info.file, info.fileList);
                           }
                           if (info.file.status === 'done') {
-                            // console.log(info.file.response.data.url)
+                            console.log(info.file.response.data.url)
                             thisTemp.url=info.file.response.data.url
                             message.success(`${info.file.name} 上传成功`);
                           } else if (info.file.status === 'error') {
@@ -391,7 +414,7 @@ class tablesTkVideo extends React.Component {
                             console.log(info.file, info.fileList);
                           }
                           if (info.file.status === 'done') {
-                            // console.log(info.file.response.data.url)
+                            console.log(info.file.response.data.url)
                             thisTemp.url=info.file.response.data.url
                             message.success(`${info.file.name} 上传成功`);
                           } else if (info.file.status === 'error') {
@@ -410,7 +433,7 @@ class tablesTkVideo extends React.Component {
                             console.log(info.file, info.fileList);
                           }
                           if (info.file.status === 'done') {
-                            // console.log(info.file.response)
+                            console.log(info.file.response)
                             // console.log(info.file.response.data.url)
                             thisTemp.urlimg=info.file.response.data.url
                             message.success(`${info.file.name} 上传成功`);

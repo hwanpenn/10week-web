@@ -20,7 +20,7 @@ import { LocaleProvider,InputNumber } from 'antd';
 // import ReactQuill, { Quill } from 'react-quill';
 // import { ImageDrop } from 'quill-image-drop-module';
 // import { Editor } from 'wangeditor';
-import E from 'wangeditor'
+// import E from 'wangeditor'
 // import Quill from "quill";
 // import 'quill/dist/quill.snow.css'
 // import 'react-quill/dist/quill.snow.css';
@@ -231,45 +231,47 @@ class tablesTkRecipe extends React.Component {
                     textOverflow: 'ellipsis',
                     whiteSpace: 'nowrap',
                     display: 'inline-block',
-                    width: 200
+                    width: 130
                 }}>{text}</span>
           </Popover>
         },
-        //  {
-        //     title: '热量',
-        //     dataIndex: 'heat',
-        //     key: 'heat',
-        //     // align: 'center'
-        //     width: '10%'
-        // },
-        // {
-        //     title: '标题图',
-        //     dataIndex: 'url',
-        //     key: 'url',
-        //     // align: 'center'
-        //     width: '15%',
-        //     render: text => <img style={{ height: '20px', marginRight: '0px' }} src={text} alt="" />,
-        //     // render: text => <a >{text}</a>,
-        // },
+         {
+            title: '热量',
+            dataIndex: 'heat',
+            key: 'heat',
+            // align: 'center'
+            width: '10%',
+            render: text => <a >{text?text:'无'}</a>,
+        },
         {
-            title: '详情',
-            dataIndex: 'content',
-            key: 'content',
-            // align: 'center',
-            width: '20%',
-            render: text => <Popover content={(
-                <div style={{width:270}}>
-                  <p>{text}</p>
-                </div>
-              )}>
-             <span style={{overflow: 'hidden',
-                    textOverflow: 'ellipsis',
-                    whiteSpace: 'nowrap',
-                    display: 'inline-block',
-                    width: 270
-                }}>{text?text:"空"}</span>
-          </Popover>
-        },  {
+            title: '标题图',
+            dataIndex: 'url',
+            key: 'url',
+            // align: 'center'
+            width: '15%',
+            render: text => <img style={{ height: '20px', marginRight: '0px' }} src={text} alt="" />,
+            // render: text => <a >{text}</a>,
+        },
+        // {
+        //     title: '详情',
+        //     dataIndex: 'content',
+        //     key: 'content',
+        //     // align: 'center',
+        //     width: '20%',
+        //     render: text => <Popover content={(
+        //         <div style={{width:270}}>
+        //           <p>{text}</p>
+        //         </div>
+        //       )}>
+        //      <span style={{overflow: 'hidden',
+        //             textOverflow: 'ellipsis',
+        //             whiteSpace: 'nowrap',
+        //             display: 'inline-block',
+        //             width: 270
+        //         }}>{text?text:"空"}</span>
+        //   </Popover>
+        // },  
+        {
             title: '操作',
             key: 'action',
             width: '20%',

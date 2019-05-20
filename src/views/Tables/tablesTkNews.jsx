@@ -20,7 +20,7 @@ import { LocaleProvider } from 'antd';
 // import ReactQuill, { Quill } from 'react-quill';
 // import { ImageDrop } from 'quill-image-drop-module';
 // import { Editor } from 'wangeditor';
-import E from 'wangeditor'
+// import E from 'wangeditor'
 // import Quill from "quill";
 // import 'quill/dist/quill.snow.css'
 // import 'react-quill/dist/quill.snow.css';

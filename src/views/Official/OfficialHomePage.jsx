@@ -1,26 +1,26 @@
 import React from "react";
 import PropTypes from "prop-types";
 import withStyles from "@material-ui/core/styles/withStyles";
-import InputAdornment from "@material-ui/core/InputAdornment";
+// import InputAdornment from "@material-ui/core/InputAdornment";
 
-import Face from "@material-ui/icons/Face";
+// import Face from "@material-ui/icons/Face";
 
-import GridContainer from "components/Grid/GridContainer.jsx";
-import GridItem from "components/Grid/GridItem.jsx";
-import CustomInput from "components/CustomInput/CustomInput.jsx";
+// import GridContainer from "components/Grid/GridContainer.jsx";
+// import GridItem from "components/Grid/GridItem.jsx";
+// import CustomInput from "components/CustomInput/CustomInput.jsx";
 import { Button,Breadcrumb } from 'antd';
-import Card from "components/Card/Card.jsx";
-import CardBody from "components/Card/CardBody.jsx";
-import CardHeader from "components/Card/CardHeader.jsx";
-import CardFooter from "components/Card/CardFooter.jsx";
+// import Card from "components/Card/Card.jsx";
+// import CardBody from "components/Card/CardBody.jsx";
+// import CardHeader from "components/Card/CardHeader.jsx";
+// import CardFooter from "components/Card/CardFooter.jsx";
 
 import officialHomePageStyle from "assets/jss/material-dashboard-pro-react/views/officialHomePageStyle.jsx";
-import LockOpen from "@material-ui/icons/LockOpen";
+// import LockOpen from "@material-ui/icons/LockOpen";
 // import axios from 'axios';
-import axios from '../../Utils/axios';
+// import axios from '../../Utils/axios';
 import { message } from 'antd';
-import VCode from '../../variables/VCode'
-import {canvas} from '../../variables/VCode'
+// import VCode from '../../variables/VCode'
+// import {canvas} from '../../variables/VCode'
 import cx from "classnames";
 import logo from "assets/img/android.png";
 // import shineyueLogo from "assets/img/logoRule.png";

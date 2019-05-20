@@ -232,7 +232,7 @@ class tablesTkUser extends React.Component {
             dataIndex: 'mobile',
             key: 'mobile',
             // align: 'center'
-            width: '13%'
+            width: '13%',
         }, 
         {
             title: '会员状态',

@@ -1,32 +1,9 @@
 import React from "react";
 import PropTypes from "prop-types";
 import withStyles from "@material-ui/core/styles/withStyles";
-import InputAdornment from "@material-ui/core/InputAdornment";
-
-import Face from "@material-ui/icons/Face";
-
-import GridContainer from "components/Grid/GridContainer.jsx";
-import GridItem from "components/Grid/GridItem.jsx";
-import CustomInput from "components/CustomInput/CustomInput.jsx";
-import { Button,Breadcrumb } from 'antd';
-import Card from "components/Card/Card.jsx";
-import CardBody from "components/Card/CardBody.jsx";
-import CardHeader from "components/Card/CardHeader.jsx";
-import CardFooter from "components/Card/CardFooter.jsx";
-
 import mobilePageStyle from "assets/jss/material-dashboard-pro-react/views/mobilePageStyle.jsx";
-import LockOpen from "@material-ui/icons/LockOpen";
-// import axios from 'axios';
-// import axios from '../../Utils/axios';
 import { message } from 'antd';
-import VCode from '../../variables/VCode'
-import {canvas} from '../../variables/VCode'
 import cx from "classnames";
-import logo from "assets/img/android.png";
-// import shineyueLogo from "assets/img/logoRule.png";
-import shineyueLogo from "assets/img/icon03.png";
-import logo1 from "assets/img/ios.png";
-// import logo1 from "assets/img/icon.png";
 import axios from 'axios';
 import { NavBar, Icon } from 'antd-mobile';
 import 'antd-mobile/dist/antd-mobile.css';
@@ -36,7 +13,9 @@ var echarts = require('echarts');
 
 message.config({
     duration: 1,
+    top:100
 });
+
 
 class ChartPage extends React.Component {
 
@@ -105,7 +84,7 @@ class ChartPage extends React.Component {
         var interval=setInterval(function () {
             option.series[0].data[0].value = parseInt((Math.random() * 100).toFixed(2) - 0);
             myChart.setOption(option, true);
-            if(count > 4){
+            if(count > 3){
                 option.series[0].data[0].value = parseInt((thisTemp.state.data.vipDay/70)*100);
                 myChart.setOption(option, true);
                 clearInterval(interval);
@@ -158,11 +137,11 @@ class ChartPage extends React.Component {
                         }
                     },
                     data:[
-                        {value:this.state.rows[0].sitUp, name:'仰卧起坐'},
-                        {value:this.state.rows[0].flatSupport, name:'平板支撑'},
-                        {value:this.state.rows[0].pushUp, name:'俯卧撑'},
-                        {value:this.state.rows[0].squat, name:'深蹲'},
-                        {value:this.state.rows[0].bobbyJump, name:'波比跳'}
+                        {value:this.state.rows[0]===undefined?0:this.state.rows[0].sitUp, name:'仰卧起坐'},
+                        {value:this.state.rows[0]===undefined?0:this.state.rows[0].flatSupport, name:'平板支撑'},
+                        {value:this.state.rows[0]===undefined?0:this.state.rows[0].pushUp, name:'俯卧撑'},
+                        {value:this.state.rows[0]===undefined?0:this.state.rows[0].squat, name:'深蹲'},
+                        {value:this.state.rows[0]===undefined?0:this.state.rows[0].bobbyJump, name:'波比跳'}
                     ]
                 }
             ]
@@ -182,7 +161,7 @@ class ChartPage extends React.Component {
                 type: 'value'
             },
             series: [{
-                data: [this.state.rows[0].bust, this.state.rows[1].bust, this.state.rows[2].bust, this.state.rows[3].bust, this.state.rows[4].bust, this.state.rows[5].bust, this.state.rows[6].bust],
+                data: [this.state.rows[0]===undefined?0:this.state.rows[0].bust, this.state.rows[1]===undefined?0:this.state.rows[1].bust, this.state.rows[2]===undefined?0:this.state.rows[2].bust, this.state.rows[3]===undefined?0:this.state.rows[3].bust, this.state.rows[4]===undefined?0:this.state.rows[4].bust, this.state.rows[5]===undefined?0:this.state.rows[5].bust, this.state.rows[6]===undefined?0:this.state.rows[6].bust],
                 type: 'line'
             }]
         };
@@ -226,7 +205,7 @@ class ChartPage extends React.Component {
                     name:'波比跳',
                     type:'bar',
                     barWidth: '60%',
-                    data:[this.state.rows[0].bobbyJump, this.state.rows[1].bobbyJump, this.state.rows[2].bobbyJump, this.state.rows[3].bobbyJump, this.state.rows[4].bobbyJump, this.state.rows[5].bobbyJump, this.state.rows[6].bobbyJump]
+                    data:[this.state.rows[0]===undefined?0:this.state.rows[0].bobbyJump, this.state.rows[1]===undefined?0:this.state.rows[1].bobbyJump, this.state.rows[2]===undefined?0:this.state.rows[2].bobbyJump, this.state.rows[3]===undefined?0:this.state.rows[3].bobbyJump, this.state.rows[4]===undefined?0:this.state.rows[4].bobbyJump, this.state.rows[5]===undefined?0:this.state.rows[5].bobbyJump, this.state.rows[6]===undefined?0:this.state.rows[6].bobbyJump]
                 }
             ]
         };
@@ -282,28 +261,28 @@ class ChartPage extends React.Component {
                     type:'line',
                     stack: '总量',
                     areaStyle: {},
-                    data:[this.state.rows[0].waist, this.state.rows[1].waist, this.state.rows[2].waist, this.state.rows[3].waist, this.state.rows[4].waist, this.state.rows[5].waist, this.state.rows[6].waist]
+                    data:[this.state.rows[0]===undefined?0:this.state.rows[0].waist, this.state.rows[1]===undefined?0:this.state.rows[1].waist, this.state.rows[2]===undefined?0:this.state.rows[2].waist, this.state.rows[3]===undefined?0:this.state.rows[3].waist, this.state.rows[4]===undefined?0:this.state.rows[4].waist, this.state.rows[5]===undefined?0:this.state.rows[5].waist, this.state.rows[6]===undefined?0:this.state.rows[6].waist]
                 },
                 {
                     name:'体脂率',
                     type:'line',
                     stack: '总量',
                     areaStyle: {},
-                    data:[this.state.rows[0].bodyFatRate, this.state.rows[1].bodyFatRate, this.state.rows[2].bodyFatRate, this.state.rows[3].bodyFatRate, this.state.rows[4].bodyFatRate, this.state.rows[5].bodyFatRate, this.state.rows[6].bodyFatRate]
+                    data:[this.state.rows[0]===undefined?0:this.state.rows[0].bodyFatRate, this.state.rows[1]===undefined?0:this.state.rows[1].bodyFatRate, this.state.rows[2]===undefined?0:this.state.rows[2].bodyFatRate, this.state.rows[3]===undefined?0:this.state.rows[3].bodyFatRate, this.state.rows[4]===undefined?0:this.state.rows[4].bodyFatRate, this.state.rows[5]===undefined?0:this.state.rows[5].bodyFatRate, this.state.rows[6]===undefined?0:this.state.rows[6].bodyFatRate]
                 },
                 {
                     name:'身体水分率',
                     type:'line',
                     stack: '总量',
                     areaStyle: {},
-                    data:[this.state.rows[0].bodyMoistureRate, this.state.rows[1].bodyMoistureRate, this.state.rows[2].bodyMoistureRate, this.state.rows[3].bodyMoistureRate, this.state.rows[4].bodyMoistureRate, this.state.rows[5].bodyMoistureRate, this.state.rows[6].bodyMoistureRate]
-                },
+                    data:[this.state.rows[0]===undefined?0:this.state.rows[0].bodyMoistureRate, this.state.rows[1]===undefined?0:this.state.rows[1].bodyMoistureRate, this.state.rows[2]===undefined?0:this.state.rows[2].bodyMoistureRate, this.state.rows[3]===undefined?0:this.state.rows[3].bodyMoistureRate, this.state.rows[4]===undefined?0:this.state.rows[4].bodyMoistureRate, this.state.rows[5]===undefined?0:this.state.rows[5].bodyMoistureRate, this.state.rows[6]===undefined?0:this.state.rows[6].bodyMoistureRate]
+                 },
                 {
                     name:'肌肉量',
                     type:'line',
                     stack: '总量',
                     areaStyle: {normal: {}},
-                    data:[this.state.rows[0].muscleMass, this.state.rows[1].muscleMass, this.state.rows[2].muscleMass, this.state.rows[3].muscleMass, this.state.rows[4].muscleMass, this.state.rows[5].muscleMass, this.state.rows[6].muscleMass]
+                    data:[this.state.rows[0]===undefined?0:this.state.rows[0].muscleMass, this.state.rows[1]===undefined?0:this.state.rows[1].muscleMass, this.state.rows[2]===undefined?0:this.state.rows[2].muscleMass, this.state.rows[3]===undefined?0:this.state.rows[3].muscleMass, this.state.rows[4]===undefined?0:this.state.rows[4].muscleMass, this.state.rows[5]===undefined?0:this.state.rows[5].muscleMass, this.state.rows[6]===undefined?0:this.state.rows[6].muscleMass]
                 },
                 {
                     name:'基础代谢率',
@@ -316,7 +295,7 @@ class ChartPage extends React.Component {
                         }
                     },
                     areaStyle: {normal: {}},
-                    data:[this.state.rows[0].basalMetabolicRate, this.state.rows[1].basalMetabolicRate, this.state.rows[2].basalMetabolicRate, this.state.rows[3].basalMetabolicRate, this.state.rows[4].basalMetabolicRate, this.state.rows[5].basalMetabolicRate, this.state.rows[6].basalMetabolicRate]
+                    data:[this.state.rows[0]===undefined?0:this.state.rows[0].basalMetabolicRate, this.state.rows[1]===undefined?0:this.state.rows[1].basalMetabolicRate, this.state.rows[2]===undefined?0:this.state.rows[2].basalMetabolicRate, this.state.rows[3]===undefined?0:this.state.rows[3].basalMetabolicRate, this.state.rows[4]===undefined?0:this.state.rows[4].basalMetabolicRate, this.state.rows[5]===undefined?0:this.state.rows[5].basalMetabolicRate, this.state.rows[6]===undefined?0:this.state.rows[6].basalMetabolicRate]
                 }
             ]
         };
@@ -410,32 +389,35 @@ class ChartPage extends React.Component {
             });
         return (
             <div style={{padding: '0px'}} >
-                  <NavBar
+                  <NavBar style={{zIndex:9999,position: "fixed",left: 0,top: 0,width: "100%"}}
                     mode="light"
-                    icon={<Icon onClick={this.goBack} type="left" />}
-                    onLeftClick={() => console.log('onLeftClick')}
+                    leftContent={[
+                      <a onClick={this.goBack}  style={{ marginRight: '6px' }} >返回首页</a>,
+                    ]}
                     rightContent={[
                         <a onClick={this.goto}  style={{ marginRight: '6px' }} >列表数据</a>,
                         
                     ]}
                     >十周挑战可视化</NavBar>
-                
-                <div style={{marginTop: '30px'}} >
-                <p style={{textAlign: 'center'}}>{"十周挑战完成的度"}</p>
-                <div id="container01" style={{ width: 360, height: 360,margin:"0 auto" }}></div>
-                
-                <p style={{textAlign: 'center'}}>{"十周挑战每日波比跳"}</p>
-                <div id="container04" style={{ width: 360, height: 360,margin:"0 auto" }}></div>
-                
-                <p style={{textAlign: 'center'}}>{"十周挑战运动占比"}</p>
-                <div id="container02" style={{ width: 360, height: 360,margin:"0 auto" }}></div>
-                
-                <p style={{textAlign: 'center'}}>{"十周挑战力量测试"}</p>
-                <div id="container03" style={{ width: 360, height: 360,margin:"0 auto" }}></div>
-                
-                <p style={{textAlign: 'center'}}>{"十周挑战综合指数"}</p>
-                <div id="container05" style={{ width: 360, height: 360,margin:"0 auto" }}></div>
+                <div style={{paddingTop: '20px',margin:'47px auto', maxWidth: 677}}>
+                    <div style={{marginTop: '30px'}} >
+                    <p style={{textAlign: 'center'}}>{"十周挑战完成的度"}</p>
+                    <div id="container01" style={{ width: 330, height: 330,margin:"0 auto" }}></div>
+                    
+                    <p style={{textAlign: 'center'}}>{"十周挑战每日波比跳"}</p>
+                    <div id="container04" style={{ width: 330, height: 250,margin:"0 auto" }}></div>
+                    
+                    <p style={{marginTop:25, textAlign: 'center'}}>{"十周挑战运动占比"}</p>
+                    <div id="container02" style={{ width: 330, height: 330,margin:"0 auto" }}></div>
+                    
+                    <p style={{textAlign: 'center'}}>{"十周挑战力量测试"}</p>
+                    <div id="container03" style={{ width: 330, height: 250,margin:"0 auto" }}></div>
+                    
+                    <p style={{textAlign: 'center'}}>{"十周挑战综合指数"}</p>
+                    <div id="container05" style={{ width: 330, height: 250,margin:"0 auto" }}></div>
+                    </div>
                 </div>
+                
             </div>
 
         );

@@ -1,104 +1,176 @@
 import React from "react";
-import PropTypes from "prop-types";
 import withStyles from "@material-ui/core/styles/withStyles";
-import InputAdornment from "@material-ui/core/InputAdornment";
-
-import Face from "@material-ui/icons/Face";
-
-import GridContainer from "components/Grid/GridContainer.jsx";
-import GridItem from "components/Grid/GridItem.jsx";
-import CustomInput from "components/CustomInput/CustomInput.jsx";
-import { Button,Breadcrumb } from 'antd';
-import Card from "components/Card/Card.jsx";
-import CardBody from "components/Card/CardBody.jsx";
-import CardHeader from "components/Card/CardHeader.jsx";
-import CardFooter from "components/Card/CardFooter.jsx";
+import { Button } from 'antd';
 import { NavBar, Icon as IconM } from 'antd-mobile';
+import enUS from 'antd-mobile/lib/calendar/locale/en_US';
+import zhCN from 'antd-mobile/lib/calendar/locale/zh_CN';
+import { ImagePicker, WingBlank, SegmentedControl ,List, Switch,Calendar } from 'antd-mobile';
 import 'antd-mobile/dist/antd-mobile.css';
 import mobilePageStyle from "assets/jss/material-dashboard-pro-react/views/mobilePageStyle.jsx";
-import LockOpen from "@material-ui/icons/LockOpen";
-// import axios from 'axios';
-// import axios from '../../Utils/axios';
 import { message } from 'antd';
-import VCode from '../../variables/VCode'
 import './style.css'
-import {canvas} from '../../variables/VCode'
-import cx from "classnames";
-import logo from "assets/img/android.png";
-// import shineyueLogo from "assets/img/logoRule.png";
-import shineyueLogo from "assets/img/icon03.png";
-import logo1 from "assets/img/ios.png";
-// import logo1 from "assets/img/icon.png";
 import axios from 'axios';
-
 import {
-    Form, Select, InputNumber, Switch, Radio,
-    Slider, Upload, Icon, Rate, Checkbox,Input,DatePicker,
-    Row, Col,
+    Form, Select, InputNumber, Radio,
+    Slider, Upload, Icon, Input,DatePicker,
   } from 'antd';
   
   const { Option } = Select;
+  message.config({
+    top: 100
+  });
+const data = [{
+  url: 'https://zos.alipayobjects.com/rmsportal/PZUUCKTRIHWiZSY.jpeg',
+  id: '2121',
+}, {
+  url: 'https://zos.alipayobjects.com/rmsportal/hqQWgTXdrlmVVYi.jpeg',
+  id: '2122',
+}];
+const extra = {
+  '2017/07/15': { info: 'Disable', disable: true },
+};
 
+const now = new Date();
+extra[+new Date(now.getFullYear(), now.getMonth(), now.getDate() + 5)] = { info: 'Disable', disable: true };
+extra[+new Date(now.getFullYear(), now.getMonth(), now.getDate() + 6)] = { info: 'Disable', disable: true };
+extra[+new Date(now.getFullYear(), now.getMonth(), now.getDate() + 7)] = { info: 'Disable', disable: true };
+extra[+new Date(now.getFullYear(), now.getMonth(), now.getDate() + 8)] = { info: 'Disable', disable: true };
 
+Object.keys(extra).forEach((key) => {
+  const info = extra[key];
+  const date = new Date(key);
+  if (!Number.isNaN(+date) && !extra[+date]) {
+    extra[+date] = info;
+  }
+});
 // import 'jsencrypt';
 class BaseDataPage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-        data:{}
+        data:{},
+        modify:false,
+        files: data,
+  multiple: false,
+  en: false,
+      show: false,
+      config: {},
     };
 }
+renderBtn(zh, en, config = {}) {
+  config.locale = this.state.en ? enUS : zhCN;
+  return (
+    <List.Item arrow="horizontal"
+      onClick={() => {
+        document.getElementsByTagName('body')[0].style.overflowY = 'hidden';
+        this.setState({
+          show: true,
+          config,
+        });
+      }}
+    >
+      {this.state.en ? en : zh}
+    </List.Item>
+  );
+}
+changeLanguage = () => {
+  this.setState({
+    en: !this.state.en,
+  });
+}
+onSelectHasDisableDate = (dates) => {
+  console.warn('onSelectHasDisableDate', dates);
+}
+onConfirm = (startTime, endTime) => {
+  document.getElementsByTagName('body')[0].style.overflowY = this.originbodyScrollY;
+  this.setState({
+    show: false,
+    startTime,
+    endTime,
+  });
+}
+onCancel = () => {
+  document.getElementsByTagName('body')[0].style.overflowY = this.originbodyScrollY;
+  this.setState({
+    show: false,
+    startTime: undefined,
+    endTime: undefined,
+  });
+}
+getDateExtra = date => extra[+date];
+onChange = (files, type, index) => {
+  console.log(files, type, index);
+  this.setState({
+    files,
+  });
+}
+onSegChange = (e) => {
+  const index = e.nativeEvent.selectedSegmentIndex;
+  this.setState({
+    multiple: index === 1,
+  });
+}
     handleSubmit = (e) => {
-      const thisTemp = this
-      e.preventDefault();
-      this.props.form.validateFields((err, values) => {
-        if (!err) {
-          console.log('Received values of form: ', values);
-          values.picture=this.urlimg
-          axios.put('/api/user/'+this.props.match.params.id,values
-          ).then( (response) => {
-                console.log(response.data.data)
-                
-                if(response.data.code===0){
-                  message.info(response.data.msg);
-                  thisTemp.props.history.push("/mobile/ranklistpage");
-              }else {
-                  message.info(response.data.msg);
-              }
-      
-              })
-              .catch(function (error) {
-                  console.log(error);
-              });
-
-        }
-      });
+        message.info('此通道已过期');
+        // const thisTemp = this
+        // e.preventDefault();
+        // this.props.form.validateFields((err, values) => {
+        //   if (!err) {
+        //     console.log('Received values of form: ', values);
+        //     values.picture=this.urlimg
+        //     axios.put('/api/user/'+this.props.match.params.id,values
+        //     ).then( (response) => {
+        //           console.log(response.data.data)
+                  
+        //           if(response.data.code===0){
+        //             message.info(response.data.msg);
+        //             this.setState({
+        //               modify:false
+        //             })
+        //             thisTemp.getData()
+        //             // thisTemp.props.history.push("/mobile/ranklistpage");
+        //         }else {
+        //             message.info(response.data.msg);
+        //         }
+        
+        //         })
+        //         .catch(function (error) {
+        //             console.log(error);
+        //         });
+  
+        //   }
+        // });
     }
 
     componentDidMount() {
       // let thisTemp = this
-      
-      axios.get('/api/user/'+this.props.match.params.id
-        ).then( (response) => {
-        console.log(response.data.data)
-          this.setState({
-            data:response.data.data
-                          
-                      })
-          // if(response.code===0){
-          //     // document.getElementById("layui-layer2").style.display='block'
-          // }else {
-          //     message.info(response.data.msg);
-          // }
-
-        })
-        .catch(function (error) {
-            console.log(error);
-        });
+      this.getData()
       // we add a hidden class to the card and after 700 ms we delete it and the transition appears
 
   }
+
+  getData = () => {
+    axios.get('/api/user/'+this.props.match.params.id
+    ).then( (response) => {
+    console.log(response.data.data)
+      this.setState({
+        data:response.data.data
+                      
+                  })
+    })
+    .catch(function (error) {
+        console.log(error);
+    });
+  }
   
+  switch = (e) => {
+    e.stopPropagation()
+    this.setState({
+      modify:!this.state.modify
+    })
+   
+    }
+
     normFile = (e) => {
       console.log('Upload event:', e);
       if (Array.isArray(e)) {
@@ -126,6 +198,7 @@ class BaseDataPage extends React.Component {
 
   
     render() {
+      const { files } = this.state;
       let thisTemp = this
       const { getFieldDecorator } = this.props.form;
       const formItemLayout = {
@@ -154,114 +227,165 @@ class BaseDataPage extends React.Component {
       return (
         <div>
         <div  style={{textAlign:'center'}}>
-        <NavBar
+        <NavBar style={{zIndex: 9999, position: "fixed",left: 0,top: 0,width: "100%"}}
                       mode="light"
-                      icon={<IconM onClick={this.goBack} type="left" />}
-                      onLeftClick={() => console.log('onLeftClick')}
+                      leftContent={[
+                      <a onClick={this.goBack}  style={{ marginRight: '6px' }} >返回首页</a>,
+                    ]}
                       rightContent={[
-                          <a onClick={this.goto}  style={{ marginRight: '6px' }} >健身新闻</a>,
+                          <a onClick={(e)=>this.switch(e)}  style={{ marginRight: '6px' }} >编辑数据</a>,
                           
                       ]}
                       >基础数据</NavBar>
                   </div>
-        <div style={{padding: '20px',margin:'0 auto', maxWidth: 677}}>
+        <div style={{padding: '20px',margin:'47px auto', maxWidth: 677}}>
                 
 
                 <Form {...formItemLayout} onSubmit={this.handleSubmit}>
           <Form.Item
             label="用户名"
           >
-            {getFieldDecorator('realName', {
-              initialValue:  this.state.data.realName ,
-          rules: [{ required: true, message: '请输入用户名!' }],
-        })(<Input />)}
+
+          {this.state.modify?
+          (getFieldDecorator('realName', {
+            initialValue:  this.state.data.realName ,
+        rules: [{ required: true, message: '请输入用户名!' }],
+      })(<Input />))
+        :(this.state.data.realName)
+        }
+            
           </Form.Item>
 
-          <Form.Item
+           <Form.Item
             label="地址"
           >
-             {getFieldDecorator('city', {
-               initialValue:  this.state.data.city ,
-          rules: [{ required: false, message: '请输入地址!' }],
-        })(<Input />)}
+             
+        {this.state.modify?
+          (getFieldDecorator('city', {
+            initialValue:  this.state.data.city ,
+       rules: [{ required: false, message: '请输入地址!' }],
+     })(<Input />))
+        :(this.state.data.city)
+        }
+
           </Form.Item>
           <Form.Item
             label="邮件"
           >
-            {getFieldDecorator('email', {
-              initialValue:  this.state.data.email ,
-            rules: [{
-              type: 'email', message: '输入的不是邮件!',
-            }, {
-              required: false, message: '请输入邮件!',
-            }],
-          })(
-            <Input />
-          )}
+
+{this.state.modify?
+          (getFieldDecorator('email', {
+            initialValue:  this.state.data.email ,
+          rules: [{
+            type: 'email', message: '输入的不是邮件!',
+          }, {
+            required: false, message: '请输入邮件!',
+          }],
+        })(
+          <Input />
+        ))
+        :(this.state.data.email)
+        }
+
           </Form.Item>
 
           <Form.Item
             label="年龄"
           >
-             {getFieldDecorator('age', { initialValue:  this.state.data.age , })(
-            <InputNumber min={1} max={120} />
-          )}
-          <span className="ant-form-text"> 岁</span>
+
+{this.state.modify?
+  (getFieldDecorator('age', { initialValue:  this.state.data.age , })(
+    <InputNumber min={1} max={120} />
+  ))
+:(this.state.data.age)
+}
+{this.state.data.age?<span className="ant-form-text"> 岁</span>:<span className="ant-form-text"> 无记录</span>}
+          
           </Form.Item>
           <Form.Item
             label="身高"
           >
-             {getFieldDecorator('height', { initialValue:  this.state.data.height })(
-            <InputNumber min={1} max={250} />
-          )}
-          <span className="ant-form-text"> 厘米</span>
+          
+{this.state.modify?
+  (getFieldDecorator('height', { initialValue:  this.state.data.height })(
+    <InputNumber min={1} max={250} />
+  ))
+:(this.state.data.height)
+}
+{this.state.data.height?<span className="ant-form-text"> 厘米</span>:<span className="ant-form-text">无记录</span>}
+          
           </Form.Item>
           <Form.Item
             label="体重"
           >
-            {getFieldDecorator('weight', { initialValue:  this.state.data.weight , })(
-            <InputNumber min={1} max={150} />
-          )}
+
+{this.state.modify?
+  (getFieldDecorator('weight', { initialValue:  this.state.data.weight , })(
+    <InputNumber min={1} max={150} />
+  ))
+:(this.state.data.weight?this.state.data.weight:'无记录')
+}
+
           <span className="ant-form-text"> 千克</span>
           </Form.Item>
           <Form.Item
             label="性别"
           >
-             {getFieldDecorator('sex',{initialValue:  this.state.data.sex ,})(
-            <Radio.Group>
-              <Radio value="男">男</Radio>
-              <Radio value="女">女</Radio>
-            </Radio.Group>
-          )}
+
+{this.state.modify?
+  (getFieldDecorator('sex',{initialValue:  this.state.data.sex ,})(
+    <Radio.Group>
+      <Radio value="男">男</Radio>
+      <Radio value="女">女</Radio>
+    </Radio.Group>
+  ))
+:(this.state.data.sex?this.state.data.sex:'未记录')
+}
+
           </Form.Item>
           <Form.Item
             label="出生日期"
           >
-            {getFieldDecorator('birth', {
-              // initialValue:  this.state.data.birth ,
-              rules:[{ type: 'object', required: false, message: 'Please select time!' }]})(
-            <DatePicker />
-          )}
+
+{this.state.modify?
+  (getFieldDecorator('birth', {
+    // initialValue:  this.state.data.birth ,
+    rules:[{ type: 'object', required: false, message: 'Please select time!' }]})(
+  <DatePicker />
+))
+:(this.state.data.birth?this.state.data.birth.slice(0, 10):'无记录')
+}
+
           </Form.Item>
           
           <Form.Item
             label="运动强度"
           >
-             {getFieldDecorator('exerciseVolume',{
-               initialValue:  this.state.data.exerciseVolume ,
-             })(
-            <Slider marks={{
-              0: 'A', 20: 'B', 40: 'C', 60: 'D', 80: 'E', 100: 'F',
-            }}
-            />
-          )}
+
+{this.state.modify?
+  (getFieldDecorator('exerciseVolume',{
+    initialValue:  this.state.data.exerciseVolume ,
+  })(
+ <Slider marks={{
+   0: 'A', 20: 'B', 40: 'C', 60: 'D', 80: 'E', 100: 'F',
+ }}
+ />
+))
+:(this.state.data.exerciseVolume?this.state.data.exerciseVolume:'无')
+}
+
           </Form.Item>
           <Form.Item
             label="收入"
           >
-            {getFieldDecorator('income', { initialValue:  this.state.data.income , })(
-            <InputNumber min={1} max={10000000} />
-          )}
+
+{this.state.modify?
+  (getFieldDecorator('income', { initialValue:  this.state.data.income , })(
+    <InputNumber min={1} max={10000000} />
+  ))
+:(this.state.data.income?this.state.data.income:0)
+}
+
           <span className="ant-form-text"> 澳元</span>
           </Form.Item>
           {/* <Form.Item
@@ -278,28 +402,103 @@ class BaseDataPage extends React.Component {
             </Upload>
           )}
           </Form.Item> */}
-          <Form.Item label="上传照片">
-          {getFieldDecorator('picture', {
-              rules: [{ required: false, message: '请上传图片!' }],
-          })(
-              <Upload {...propsimg}>
-                  <Button>
-                  <Icon type="upload" /> 上传图片
-                  </Button>
-              </Upload>
-          )}
+          <Form.Item label="照片">
+
+{this.state.modify?
+  (getFieldDecorator('picture', {
+    rules: [{ required: false, message: '请上传图片!' }],
+})(
+    <Upload {...propsimg}>
+        <Button>
+        <Icon type="upload" /> 上传图片
+        </Button>
+    </Upload>
+))
+:(<img style={{ height: '20px', marginRight: '0px' }} src={this.state.data.picture} alt="" />)
+}
+
       </Form.Item>
   
-         
+
+
+      <Form.Item
+            label="收入"
+          >
+      <WingBlank>
+        <SegmentedControl
+          values={['切换到单选', '切换到多选']}
+          selectedIndex={this.state.multiple ? 1 : 0}
+          onChange={this.onSegChange}
+        />
+        <ImagePicker
+          files={files}
+          onChange={this.onChange}
+          onImageClick={(index, fs) => console.log(index, fs)}
+          selectable={files.length < 7}
+          multiple={this.state.multiple}
+        />
+      </WingBlank>
+      </Form.Item>
+      <Form.Item
+            label="收入"
+          >
+        <List className="calendar-list" style={{ backgroundColor: 'white',marginTop:100 }}>
+          <List.Item className="item" extra={<Switch className="right" checked={!this.state.en} onChange={this.changeLanguage} />}>
+            {this.state.en ? 'Chinese' : '中文'}
+          </List.Item>
+          {this.renderBtn('选择日期', 'Select Date', { type: 'one' })}
+          {this.renderBtn('onSelect API', 'onSelect API', {
+            onSelect: (date, state) => {
+              console.log('onSelect', date, state);
+              return [date, new Date(+now - 604800000)];
+            },
+          })}
+          {
+            this.state.startTime &&
+            <List.Item>Time1: {this.state.startTime.toLocaleString()}</List.Item>
+          }
+          {
+            this.state.endTime &&
+            <List.Item>Time2: {this.state.endTime.toLocaleString()}</List.Item>
+          }
+        </List>
+        <Calendar
+        style={{zIndex:10000}}
+          {...this.state.config}
+          visible={this.state.show}
+          onCancel={this.onCancel}
+          onConfirm={this.onConfirm}
+          onSelectHasDisableDate={this.onSelectHasDisableDate}
+          getDateExtra={this.getDateExtra}
+          defaultDate={now}
+          minDate={new Date(+now - 5184000000)}
+          maxDate={new Date(+now + 31536000000)}
+        />
+      </Form.Item>
   
-         
-  
+
+
           <Form.Item
             wrapperCol={{ span: 12, offset: 6 }}
           >
-            <Button type="primary" htmlType="submit">Submit</Button>
+          {this.state.modify?
+          <Button type="primary" htmlType="submit">
+          提交数据
+          </Button>
+        :''
+        }
+        {/* <a type="danger" onClick={(e)=>this.switch(e)}>
+        编辑数据<Icon type="edit" theme="twoTone" />
+        </a> */}
+        {this.state.modify?
+          <Button style={{marginLeft:15}} onClick={(e)=>this.switch(e)}>
+          取消
+          </Button>
+        :''
+        }
           </Form.Item>
         </Form>
+        
         </div>
       </div>
        );

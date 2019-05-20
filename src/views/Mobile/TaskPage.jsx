@@ -2,15 +2,9 @@ import React from "react";
 import PropTypes from "prop-types";
 import withStyles from "@material-ui/core/styles/withStyles";
 import mobilePageStyle from "assets/jss/material-dashboard-pro-react/views/mobilePageStyle.jsx";
-import { message ,Tag} from 'antd';
-import cx from "classnames";
+import { Tag} from 'antd';
 import axios from 'axios';
-import { ListView ,PullToRefresh,Toast} from 'antd-mobile';
-import { DefaultPlayer as Video } from 'react-html5video';
-import ReactDOM from 'react-dom';
-import { VerticalTimeline, VerticalTimelineElement }  from 'react-vertical-timeline-component';
 import 'react-vertical-timeline-component/style.min.css';
-import { FaBeer ,Fa500px ,FaAccessibleIcon} from 'react-icons/fa';
 import { Timeline, TimelineItem }  from 'vertical-timeline-component-for-react';
 import { NavBar, Icon } from 'antd-mobile';
 import 'antd-mobile/dist/antd-mobile.css';
@@ -147,17 +141,18 @@ getData = ()=>{
             return (
               <div>
               <div  style={{textAlign:'center'}}>
-              <NavBar
+              <NavBar style={{zIndex: 9999, position: "fixed",left: 0,top: 0,width: "100%"}}
                             mode="light"
-                            icon={<Icon onClick={this.goBack} type="left" />}
-                            onLeftClick={() => console.log('onLeftClick')}
+                            leftContent={[
+                      <a onClick={this.goBack}  style={{ marginRight: '6px' }} >返回首页</a>,
+                    ]}
                             rightContent={[
                                 <a onClick={this.goto}  style={{ marginRight: '6px' }} >可视化数据</a>,
                                 
                             ]}
                             >十周挑战时间轴</NavBar>
                         </div>
-              <div style={{padding: '20px'}}>
+              <div style={{padding: '20px',marginTop:40}}>
 <Timeline lineColor={'#ddd'}>
 {piclist}
   {/* <TimelineItem

@@ -16,7 +16,9 @@ import { DefaultPlayer as Video } from 'react-html5video';
 import InfiniteScroll from 'react-infinite-scroller';
 
 const fakeDataUrl = 'https://randomuser.me/api/?results=5&inc=name,gender,email,nat&noinfo';
-
+message.config({
+  top: 100
+});
 class RankListPage extends React.Component {
   state = {
     data: [],

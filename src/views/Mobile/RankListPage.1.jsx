@@ -34,15 +34,11 @@ class RankListPage extends React.Component {
     hasMore: true,
     refreshing: false,
     down: true,
-    // height: 812,
     height: document.documentElement.clientHeight,
     data: [],
   }
 
   componentDidMount() {
-    if(this.state.height===0){
-      window.location.reload()
-    }
     this.fetchData()
   }
 
@@ -100,8 +96,7 @@ class RankListPage extends React.Component {
     // this.props.history.push("/mobile/ranklistpage");
 }
 goto = () => {
-  // this.fetchData()
-    // const page = this.state.page
+    const page = this.state.page
     // this.props.history.push("/cms/home/tables/killgroup?page="+page);
     this.props.history.push("/mobile/newspagelist");
     // this.setState({ visible: true });
@@ -123,6 +118,10 @@ goto = () => {
                     >十周挑战排行榜</NavBar>
                 </div>
                 <div style={{zIndex:9999,padding: '20px',marginTop:40}}>
+                
+         
+
+
           <PullToRefresh
         damping={60}
         ref={el => this.ptr = el}
@@ -145,7 +144,7 @@ goto = () => {
               "url": "/uploads/5cb4c59b4df67af77024d9e2.png",
               "content": "",
               "__v": 0,
-              "name": "位置",
+              "name": "马铃薯放冰箱容易发芽？只是因为放错了位置",
               "_id": "5cb4c5a04df67af77024d9e3",
               "key": 0
             }) => (

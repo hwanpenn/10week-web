@@ -1,21 +1,13 @@
 import React from "react";
 import PropTypes from "prop-types";
-import withStyles from "@material-ui/core/styles/withStyles";
-
-import { Button,Breadcrumb } from 'antd';
-import officialHomePageStyle from "assets/jss/material-dashboard-pro-react/views/officialHomePageStyle.jsx";
 import { message } from 'antd';
-import cx from "classnames";
-import logo from "assets/img/xiaoyue.png";
-import { Row, Col } from 'antd';
-import shineyueLogo from "assets/img/logoRule.png";
-import logo1 from "assets/img/shineyuelogo.png";
 import axios from 'axios';
 import { NavBar, Icon } from 'antd-mobile';
 import 'antd-mobile/dist/antd-mobile.css';
 
 message.config({
     duration: 1,
+    top:100
 });
 
 class PicturePage extends React.Component {
@@ -98,7 +90,10 @@ class PicturePage extends React.Component {
     render() {
 
         let piclist = this.state.rows.map((item,index)=>{
-            if(parseInt(item.vipDay%7)===0){
+            // let week = 0
+            console.log(item.vipDay)
+            if(parseInt(item.vipDay%7)===1){
+                // week++
                 // return ("第"+(parseInt(item.vipDay/7))+"周")
                 return <div key={index} style={{textAlign:'center'}}>
                 <div
@@ -108,10 +103,10 @@ class PicturePage extends React.Component {
                         fontSize: 18,
                         borderBottom: '1px solid #F6F6F6',
                     }}
-                >第{item.vipDay/7}周</div>
+                >{parseInt(item.vipDay/7)===0?'最开始':"第"+parseInt(item.vipDay/7)+"周"}</div>
                 <div style={{ display: '-webkit-box', display: 'flex',width:'400px',margin:'0px auto' }}>
-                    <img style={{width:'190px',height:'285px',background:'#cf0'}} src={this.state.data.picture} alt="" />
-                    <img style={{width:'190px',height:'285px',background:'#cc0' }} src={item.picture} alt="" />
+                    <img style={{width:'180px',height:'270px',background:'#cf0'}} src={this.state.data.picture} alt="" />
+                    <img style={{width:'180px',height:'270px',background:'#cc0' }} src={item.picture} alt="" />
                 </div>
             </div>
             }
@@ -120,17 +115,18 @@ class PicturePage extends React.Component {
         return (
             <div>
             <div  style={{textAlign:'center'}}>
-            <NavBar
+            <NavBar style={{zIndex: 9999, position: "fixed",left: 0,top: 0,width: "100%"}}
                           mode="light"
-                          icon={<Icon onClick={this.goBack} type="left" />}
-                          onLeftClick={() => console.log('onLeftClick')}
+                          leftContent={[
+                      <a onClick={this.goBack}  style={{ marginRight: '6px' }} >返回首页</a>,
+                    ]}
                           rightContent={[
                               <a onClick={this.goto}  style={{ marginRight: '6px' }} >可视化</a>,
                               
                           ]}
                           >十周挑战对比</NavBar>
                       </div>
-            <div style={{padding: '20px',margin:'0 auto', maxWidth: 677}}>
+            <div style={{padding: '7px',margin:'47px auto', maxWidth: 677}}>
                 <div  style={{textAlign:'center'}}>
                  <h3>前后对比图</h3>
                 </div>
