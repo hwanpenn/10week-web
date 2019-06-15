@@ -58,7 +58,8 @@ class tablesTkClub extends React.Component {
     }
     handleSearch = (value) => {
         this.params.search=value
-        this.getTableData()
+        // this.getTableData()
+        this.props.getDataTkClub(this.params);
     }
     handlePageChange = (value) => {
         this.params.pageNo=value

@@ -1,10 +1,10 @@
+import LockOpen from "@material-ui/icons/LockOpen";
+import Loadable from 'react-loadable';
+import Loading from './loading'
 import AsyncComponent from './asyncComponent.jsx'
 // import OfficialHomePage from "views/Official/OfficialHomePage.jsx";
 // import Fingerprint from "@material-ui/icons/Fingerprint";
-import LockOpen from "@material-ui/icons/LockOpen";
 // import FaceIdPage from "views/LoginPages/FaceIdPage";
-import Loadable from 'react-loadable';
-import Loading from './loading'
 
 const OfficialHomePage = Loadable({
     loader: () => import(/* webpackChunkName: "OfficialHomePage" */ "views/Official/OfficialHomePage.jsx"),

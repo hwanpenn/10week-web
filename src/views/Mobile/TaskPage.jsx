@@ -153,6 +153,7 @@ getData = ()=>{
                             >十周挑战时间轴</NavBar>
                         </div>
               <div style={{padding: '20px',marginTop:40}}>
+              {this.state.rows.length===0?<h3>暂无打卡记录</h3>:''}
 <Timeline lineColor={'#ddd'}>
 {piclist}
   {/* <TimelineItem

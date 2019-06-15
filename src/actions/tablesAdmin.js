@@ -88,7 +88,7 @@ export function updatePasswordDataAdmin(params) {
             if(response.data.code===0){
                 message.info('操作成功');
             }else {
-                message.info(response.data.msg);
+                message.info("初始密码错误,修改失败");
             }
         },
     }

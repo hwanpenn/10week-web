@@ -65,6 +65,7 @@ class tablesTkNews extends React.Component {
     // }
     
     getTableData = (search,start,size) => {
+        
         const params = {
             search:search,
             pageNo:start,
@@ -83,8 +84,11 @@ class tablesTkNews extends React.Component {
         this.props.getOtherTkNews(params);
     }
     handleSearch = (value) => {
+        // console.log("value")
+        // console.log(value)
         this.params.search=value
-        this.getTableData()
+        // this.getTableData()
+        this.props.getDataTkNews(this.params);
     }
     handlePageChange = (value) => {
         this.params.pageNo=value
@@ -130,7 +134,9 @@ class tablesTkNews extends React.Component {
             if (err) {
                 return;
             }
-            values.url=this.url
+            if(this.url!==''){
+                values.url=this.url
+            }
             values.id=this.state.recordAction._id
             values.content= values.content.toHTML()
             this.props.updateDataTkNews(values)
@@ -281,12 +287,12 @@ class tablesTkNews extends React.Component {
                             <a onClick={() => this.showModifyModal(record)} >修改</a>
                             <Divider type="vertical" />
 
-                            <a onClick={() => this.showModalNews(record)}>查看</a>
-                            <Divider type="vertical" />
+                            {/* <a onClick={() => this.showModalNews(record)}>查看</a>
+                            <Divider type="vertical" /> */}
 
-                            <a onClick={() => this.showModalListNews(record)}>列表</a>
+                            {/* <a onClick={() => this.showModalListNews(record)}>列表</a>
+                            <Divider type="vertical" /> */}
 
-                            <Divider type="vertical" />
                             <Popconfirm cancelText="取消" okText="确定" title="确定删除?" onConfirm={() => this.deleteConfirm(record)}>
                                 <a>删除</a>
                             </Popconfirm>
@@ -303,6 +309,10 @@ class tablesTkNews extends React.Component {
         
         const CollectionCreateForm = Form.create()(
             class extends React.Component {
+                state={
+                    disabled:false,
+                    disabledCreate:false,
+                }
                 constructor(props) {
                     super(props);
                     this.state = { editorState: BraftEditor.createEditorState(null) };
@@ -324,6 +334,7 @@ class tablesTkNews extends React.Component {
                 render() {
                     const { visible, onCancel, onCreate, form } = this.props;
                     const { getFieldDecorator } = form;
+                    let Obj = this
                     const extendControls = [
                         {
                           key: 'antd-uploader',
@@ -343,10 +354,17 @@ class tablesTkNews extends React.Component {
                         }
                       ]
                       const props = {
+                        accept:"video/png",
+                        disabled : this.state.disabled,
                         name: 'file',
                         action: '/api/upload',
                         headers: {
                         //   authorization: 'authorization-text',
+                        },
+                        onRemove() {
+                            Obj.setState({
+                                disabled:false
+                            })
                         },
                         onChange(info) {
                           if (info.file.status !== 'uploading') {
@@ -356,6 +374,9 @@ class tablesTkNews extends React.Component {
                             console.log(info.file.response)
                             thisTemp.url=info.file.response.data.url
                             message.success(`${info.file.name} 上传成功`);
+                            Obj.setState({
+                                disabled:true
+                            })
                           } else if (info.file.status === 'error') {
                             message.error(`${info.file.name} 上传失败.`);
                           }
@@ -371,6 +392,7 @@ class tablesTkNews extends React.Component {
                             cancelText="取消" okText="确定"
                             onCancel={onCancel}
                             onOk={onCreate}
+                            maskClosable={false}
                         >
                             <Form layout="vertical">
                                 <FormItem label="标题">
@@ -386,7 +408,7 @@ class tablesTkNews extends React.Component {
                                     })(
                                         <Upload {...props}>
                                             <Button>
-                                            <Icon type="upload" /> 上传图片
+                                            <Icon type="upload" /> 上传图片(.png)
                                             </Button>
                                         </Upload>
                                     )}
@@ -415,6 +437,10 @@ class tablesTkNews extends React.Component {
         );
         const CollectionModifyForm = Form.create()(
             class extends React.Component {
+                state={
+                    disabled:false,
+                    disabledCreate:false,
+                }
                 handleChange = (value) => {
                     console.log(`selected ${value}`);
                     this.props.form.setFieldsValue({
@@ -441,11 +467,18 @@ class tablesTkNews extends React.Component {
                 render() {
                     const { visible, onCancel, onCreate, form } = this.props;
                     const { getFieldDecorator } = form;
+                    let Obj = this
                     const props = {
+                        accept:"video/png",
                         name: 'file',
                         action: '/api/upload',
                         headers: {
                         //   authorization: 'authorization-text',
+                        },
+                        onRemove() {
+                            Obj.setState({
+                                disabledCreate:false
+                            })
                         },
                         onChange(info) {
                           if (info.file.status !== 'uploading') {
@@ -455,6 +488,9 @@ class tablesTkNews extends React.Component {
                             console.log(info.file.response)
                             thisTemp.url=info.file.response.data.url
                             message.success(`${info.file.name} 上传成功`);
+                            Obj.setState({
+                                disabledCreate:true
+                            })
                           } else if (info.file.status === 'error') {
                             message.error(`${info.file.name} 上传失败.`);
                           }
@@ -469,9 +505,10 @@ class tablesTkNews extends React.Component {
                             cancelText="取消" okText="确定"
                             onCancel={onCancel}
                             onOk={onCreate}
+                            maskClosable={false}
                         >
                             <Form layout="vertical">
-                                <FormItem label="食谱名称">
+                                <FormItem label="新闻名称">
                                     {getFieldDecorator('name', {
                                         initialValue:  thisTemp.state.recordAction.name ,
                                         rules: [{ required: true, message: '请输入修改食谱名称!' }],
@@ -565,6 +602,7 @@ class tablesTkNews extends React.Component {
                     // onOk={this.handleOkVideo}
                     onCancel={this.handleCancelNews}
                     footer={null}
+                    // maskClosable={false}
                     >
                     <Card
                         hoverable

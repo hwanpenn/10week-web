@@ -57,7 +57,7 @@ export function createDataTkTask(params) {
                 };
                 dispatch(getDataTkTask(params));
             }else {
-                message.info(response.data.msg);
+                message.info('新增失败（一天只能指派一个任务）');
             }
         },
     }

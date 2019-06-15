@@ -1,3 +1,9 @@
+import Apps from "@material-ui/icons/Apps";
+import ContentPaste from "@material-ui/icons/ContentPaste";
+import Wallpaper from "@material-ui/icons/Wallpaper";
+import Work from "@material-ui/icons/Work";
+import Loadable from 'react-loadable';
+import Loading from './loading'
 import AsyncComponent from './asyncComponent.jsx'
 // import tablesTkArea from "views/Tables/tablesTkArea.jsx";
 // import tablesTkClub from "views/Tables/tablesTkClub.jsx";
@@ -14,19 +20,21 @@ import AsyncComponent from './asyncComponent.jsx'
 // import tablesTkApp from "views/Tables/tablesTkApp.jsx";
 // import tablesTkBaseData from "views/Tables/tablesTkBaseData.jsx";
 // import tablesTkVipData from "views/Tables/tablesTkVipData.jsx";
-
-import Apps from "@material-ui/icons/Apps";
-import ContentPaste from "@material-ui/icons/ContentPaste";
-// import LockOpen from "@material-ui/icons/LockOpen";
-// import Forward from "@material-ui/icons/Forward";
-// import ViewColumn from "@material-ui/icons/ViewColumn";
-import Wallpaper from "@material-ui/icons/Wallpaper";
-import Work from "@material-ui/icons/Work";
 // import DashboardIcon from "@material-ui/icons/Dashboard";
 // import Dashboard from "views/Dashboard/Dashboard.jsx";
-import Loadable from 'react-loadable';
-import Loading from './loading'
+// import LockOpen from "@material-ui/icons/LockOpen";
+// import Forward from "@material-ui/icons/Forward";
+import ViewColumn from "@material-ui/icons/ViewColumn";
 
+
+const tablesTkBaseData = Loadable({
+    loader: () => import(/* webpackChunkName: "tablesTkUser" */ "views/Tables/tablesTkBaseData.jsx"),
+    loading: Loading
+});
+const tablesTkVipData = Loadable({
+    loader: () => import(/* webpackChunkName: "tablesTkVideo" */ "views/Tables/tablesTkVipData.jsx"),
+    loading: Loading
+});
 const tablesTkUser = Loadable({
     loader: () => import(/* webpackChunkName: "tablesTkUser" */ "views/Tables/tablesTkUser.jsx"),
     loading: Loading
@@ -49,41 +57,7 @@ const tablesTkRecipe = Loadable({
 });
 
 const dashRoutes2 = [
-    // {   collapse: true,
-    //     path: "/cms/home/tables",
-    //     name: "首页",
-    //     state: "openTables0",
-    //     icon: DashboardIcon,
-    //     views: [
-    //         {
-    //             path: "/cms/home/tables/dashboard",
-    //             name: "数据统计",
-    //             mini: "GS",
-    //             component: Dashboard
-    //             },
-    //     ]
-    //   },
-    // {
-    //     collapse: true,
-    //     path: "/cms/home/tables",
-    //     name: "俱乐部管理",
-    //     state: "openTables2",
-    //     icon: ContentPaste,
-    //     views: [
-    //         {
-    //             path: "/cms/home/tables/TkArea",
-    //             name: "区域分类",
-    //             mini: "RF",
-    //             component: tablesTkArea
-    //         },
-    //         {
-    //             path: "/cms/home/tables/TkClub",
-    //             name: "俱乐部",
-    //             mini: "EF",
-    //             component: tablesTkClub
-    //         }
-    //     ]
-    // },
+    
     {
         collapse: true,
         path: "/cms/home/tables",
@@ -141,6 +115,71 @@ const dashRoutes2 = [
             // }
         ]
     },
+    {
+        collapse: true,
+        path: "/cms/home/tables",
+        name: "教学视频",
+        state: "openTables6",
+        icon: Wallpaper,
+        views: [
+            {
+            path: "/cms/home/tables/TkVideo",
+            name: "视频管理",
+            mini: "B",
+            component: tablesTkVideo
+            }
+        ]
+    },
+    {
+        collapse: true,
+        path: "/cms/home/tables",
+        name: "健身食谱",
+        state: "openTables7",
+        icon: Work,
+        views: [
+            {
+            path: "/cms/home/tables/TkRecipe",
+            name: "食谱管理",
+            mini: "B",
+            component: tablesTkRecipe
+            }
+        ]
+    },
+    // {   collapse: true,
+    //     path: "/cms/home/tables",
+    //     name: "首页",
+    //     state: "openTables0",
+    //     icon: DashboardIcon,
+    //     views: [
+    //         {
+    //             path: "/cms/home/tables/dashboard",
+    //             name: "数据统计",
+    //             mini: "GS",
+    //             component: Dashboard
+    //             },
+    //     ]
+    //   },
+    // {
+    //     collapse: true,
+    //     path: "/cms/home/tables",
+    //     name: "俱乐部管理",
+    //     state: "openTables2",
+    //     icon: ContentPaste,
+    //     views: [
+    //         {
+    //             path: "/cms/home/tables/TkArea",
+    //             name: "区域分类",
+    //             mini: "RF",
+    //             component: tablesTkArea
+    //         },
+    //         {
+    //             path: "/cms/home/tables/TkClub",
+    //             name: "俱乐部",
+    //             mini: "EF",
+    //             component: tablesTkClub
+    //         }
+    //     ]
+    // },
     // {
     //     collapse: true,
     //     path: "/cms/home/tables",
@@ -189,27 +228,27 @@ const dashRoutes2 = [
     //         }
     //     ]
     // },
-    // {
-    //     collapse: true,
-    //     path: "/cms/home/tables",
-    //     name: "健身数据",
-    //     state: "openTables5",
-    //     icon: ViewColumn,
-    //     views: [
-    //         {
-    //         path: "/cms/home/tables/TkBaseData",
-    //         name: "基础数据",
-    //         mini: "B",
-    //         component: tablesTkBaseData
-    //         },
-    //         {
-    //         path: "/cms/home/tables/TkVipData",
-    //         name: "会员数据",
-    //         mini: "B",
-    //         component: tablesTkVipData
-    //         }
-    //     ]
-    // },
+    {
+        collapse: true,
+        path: "/cms/home/tables",
+        name: "健身数据",
+        state: "openTables5",
+        icon: ViewColumn,
+        views: [
+            {
+            path: "/cms/home/tables/TkBaseData",
+            name: "基础数据",
+            mini: "B",
+            component: tablesTkBaseData
+            },
+            {
+            path: "/cms/home/tables/TkVipData",
+            name: "会员数据",
+            mini: "B",
+            component: tablesTkVipData
+            }
+        ]
+    },
     // {
     //     collapse: true,
     //     path: "/cms/home/tables",
@@ -225,36 +264,7 @@ const dashRoutes2 = [
     //         }
     //     ]
     // },
-    {
-        collapse: true,
-        path: "/cms/home/tables",
-        name: "教学视频",
-        state: "openTables6",
-        icon: Wallpaper,
-        views: [
-            {
-            path: "/cms/home/tables/TkVideo",
-            name: "视频管理",
-            mini: "B",
-            component: tablesTkVideo
-            }
-        ]
-    },
-    {
-        collapse: true,
-        path: "/cms/home/tables",
-        name: "健身食谱",
-        state: "openTables7",
-        icon: Work,
-        views: [
-            {
-            path: "/cms/home/tables/TkRecipe",
-            name: "食谱管理",
-            mini: "B",
-            component: tablesTkRecipe
-            }
-        ]
-    },
+   
     // {
     //     collapse: true,
     //     path: "/cms/home/tables",

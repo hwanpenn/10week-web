@@ -121,14 +121,14 @@ class PicturePage extends React.Component {
                       <a onClick={this.goBack}  style={{ marginRight: '6px' }} >返回首页</a>,
                     ]}
                           rightContent={[
-                              <a onClick={this.goto}  style={{ marginRight: '6px' }} >可视化</a>,
+                              <a onClick={this.goto}  style={{ marginRight: '6px' }} >时间轴</a>,
                               
                           ]}
                           >十周挑战对比</NavBar>
                       </div>
             <div style={{padding: '7px',margin:'47px auto', maxWidth: 677}}>
                 <div  style={{textAlign:'center'}}>
-                 <h3>前后对比图</h3>
+                 {this.state.rows.length===0?<h3>暂无数据</h3>:<h3>前后对比图</h3>}
                 </div>
 {
     piclist

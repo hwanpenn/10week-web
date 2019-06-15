@@ -27,6 +27,7 @@ message.config({
 });
 
 let page = 0
+let timer
 class VideoListPage extends Component {
     constructor(props) {
         super(props)
@@ -43,12 +44,17 @@ class VideoListPage extends Component {
       }
 
   componentDidMount() {
-    if(this.state.height===0){
-      window.location.reload()
-    }
+    timer = window.setInterval(this.setHeight, 200);
     this.loadItems()
   }
-
+  setHeight = () =>{
+    if(document.documentElement.clientHeight!==0){
+      this.setState({
+        height:document.documentElement.clientHeight
+      })
+      window.clearTimeout(timer);   
+    }
+  }
   loadItems(pageNo) {
     axios.get('/api/video',{params:{
       pageNo: pageNo,
@@ -150,9 +156,10 @@ class VideoListPage extends Component {
     // this.props.history.push("/mobile/ranklistpage");
 }
 goto = () => {
+    this.sendData('/mobile/newspagelist')
     // const page = this.state.page
     // this.props.history.push("/cms/home/tables/killgroup?page="+page);
-    this.props.history.push("/mobile/newspagelist");
+    // this.props.history.push("/mobile/newspagelist");
     // this.setState({ visible: true });
 }
 

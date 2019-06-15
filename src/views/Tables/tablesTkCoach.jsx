@@ -66,7 +66,8 @@ class tablesTkCoach extends React.Component {
     }
     handleSearch = (value) => {
         this.params.search=value
-        this.getTableData()
+        // this.getTableData()
+        this.props.getDataTkCoach(this.params);
     }
     handlePageChange = (value) => {
         this.params.pageNo=value

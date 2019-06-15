@@ -16,6 +16,7 @@ import {Input,Modal } from 'antd';
 import {Form,Pagination,Popconfirm } from 'antd';
 import { LocaleProvider } from 'antd';
 import zh_CN from "antd/lib/locale-provider/zh_CN";
+import  BaseDataPage  from '../Forms/BaseDataForm';
 
 const FormItem = Form.Item;
 const Search = Input.Search;
@@ -633,15 +634,7 @@ class tablesTkBaseData extends React.Component {
                             </Grid>
                         </CardHeader>
                         <CardBody>
-                            <Table onRow={(record) => {
-                                    return {
-                                    onClick: () => {this.onRowSelect(record)},       
-                                    // onMouseEnter: () => {},  
-                                    };
-                                }} key={"tablesTkBaseData"} pagination={false} columns={columns} dataSource={this.props.tablesTkBaseData.tableDataTkBaseData} scroll={{x:2240,  y: 360}} />
-                            <LocaleProvider locale={zh_CN}>
-                                <Pagination  current={this.state.current} showTotal={total => `总共 ${total} 条`} showSizeChanger showQuickJumper defaultPageSize={10} total={this.props.tablesTkBaseData.tableCountTkBaseData} style={{textAlign:'right',marginTop:25}}  onShowSizeChange={(current, pageSize)=>this.getTableData('',current, pageSize)} onChange={(page, pageSize)=>this.getTableData('',page,pageSize)}/>
-                            </LocaleProvider>
+                            <BaseDataPage id={this.props.match.params.id}></BaseDataPage>
                         </CardBody>
                     </Card>
                 </GridItem>

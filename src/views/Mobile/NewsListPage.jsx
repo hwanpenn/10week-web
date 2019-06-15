@@ -21,6 +21,7 @@ message.config({
 });
 
 let page = 0
+let timer
 class VideoListPage extends Component {
     constructor(props) {
         super(props)
@@ -32,19 +33,29 @@ class VideoListPage extends Component {
           down: true,
           // height: 812,
           height: document.documentElement.clientHeight,
+          // height: window.screen.height,
           data: [],
         }
       }
 
   componentDidMount() {
-    if(this.state.height===0){
-      window.location.reload()
-    }
+    timer = window.setInterval(this.setHeight, 200);
     this.loadItems(1)
+  }
+  setHeight = () =>{
+    if(document.documentElement.clientHeight!==0){
+      this.setState({
+        height:document.documentElement.clientHeight
+      })
+      window.clearTimeout(timer);   
+    }
+  }
+  componentWillMount() {
+    document.addEventListener('message', function (e) {
+    });
   }
 
   loadItems(pageNo) {
-    // console.log(page)
     axios.get('/api/news',{params:{
       pageNo: pageNo,
       pageSize: 10}}
@@ -145,10 +156,11 @@ class VideoListPage extends Component {
     // this.props.history.push("/mobile/ranklistpage");
 }
 goto = () => {
-  // window.location.reload()
+  this.sendData('/mobile/videopagelist')
+  // // window.location.reload()
     // const page = this.state.page
     // this.props.history.push("/cms/home/tables/killgroup?page="+page);
-    this.props.history.push("/mobile/videopagelist");
+    // this.props.history.push("/mobile/videopagelist");
     // this.setState({ visible: true });
 }
 

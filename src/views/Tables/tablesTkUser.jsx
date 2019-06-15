@@ -68,7 +68,8 @@ class tablesTkUser extends React.Component {
     }
     handleSearch = (value) => {
         this.params.search=value
-        this.getTableData()
+        // this.getTableData()
+        this.props.getDataTkUser(this.params);
     }
     handlePageChange = (value) => {
         this.params.pageNo=value
@@ -189,7 +190,7 @@ class tablesTkUser extends React.Component {
             values.vip="true"
             this.props.updateDataTkUser(values);
         }else{
-            this.props.history.push("/mobile/vipdatapage/"+record._id);
+            // this.props.history.push("/mobile/vipdatapage/"+record._id);
         }
         
         // this.props.deleteDataTkUser(params)
@@ -272,18 +273,18 @@ class tablesTkUser extends React.Component {
         },  {
             title: '操作',
             key: 'action',
-            width: '38%',
+            width: '25%',
             // fixed: 'right',
             render: (text, record) => {
                     return (
                         <span>
-                            <a onClick={() => this.handleBase(record)} >基础</a>
+                            {/* <a onClick={() => this.handleBase(record)} >基础</a>
                             <Divider type="vertical" />
                             <a onClick={() => this.handleList(record)} >列表</a>
-                            <Divider type="vertical" />
-                            <a onClick={() => this.handleChart(record)} >可视化</a>
-                            <Divider type="vertical" />
-                            <a onClick={() => this.handleVip(record)} >{record.vip==="false"?"升级会员":"打卡"}</a>
+                            <Divider type="vertical" /> */}
+                            {/* <a onClick={() => this.handleChart(record)} >可视化</a>
+                            <Divider type="vertical" /> */}
+                            <a onClick={() => this.handleVip(record)} >{record.vip==="false"?"升级会员":""}</a>
                             <Divider type="vertical" />
                             <a onClick={() => this.showModifyModal(record)} >修改</a>
                             <Divider type="vertical" />
@@ -341,6 +342,7 @@ class tablesTkUser extends React.Component {
                             cancelText="取消" okText="确定"
                             onCancel={onCancel}
                             onOk={onCreate}
+                            maskClosable={false}
                         >
                             <Form layout="vertical">
                                 <FormItem label="用户名">
@@ -449,6 +451,7 @@ class tablesTkUser extends React.Component {
                             cancelText="取消" okText="确定"
                             onCancel={onCancel}
                             onOk={onCreate}
+                            maskClosable={false}
                         >
                             <Form layout="vertical">
                                 <FormItem label="用户名">

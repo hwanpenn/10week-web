@@ -83,7 +83,8 @@ class tablesTkTask extends React.Component {
     }
     handleSearch = (value) => {
         this.params.search=value
-        this.getTableData()
+        // this.getTableData()
+        this.props.getDataTkTask(this.params);
     }
     handlePageChange = (value) => {
         this.params.pageNo=value
@@ -129,7 +130,10 @@ class tablesTkTask extends React.Component {
             if (err) {
                 return;
             }
-            values.url=this.url
+            // values.url=this.url
+            if(this.url!==''){
+                values.url=this.url
+            }
             values.id=this.state.recordAction._id
             values.content= values.content.toHTML()
             this.props.updateDataTkTask(values)
@@ -290,12 +294,12 @@ class tablesTkTask extends React.Component {
                             <a onClick={() => this.showModifyModal(record)} >修改</a>
                             <Divider type="vertical" />
 
-                            <a onClick={() => this.showModalTask(record)}>时间轴</a>
-                            <Divider type="vertical" />
+                            {/* <a onClick={() => this.showModalTask(record)}>时间轴</a>
+                            <Divider type="vertical" /> */}
 
-                            <a onClick={() => this.showModalTaskDetail(record)}>详情</a>
+                            {/* <a onClick={() => this.showModalTaskDetail(record)}>详情</a>
+                            <Divider type="vertical" /> */}
 
-                            <Divider type="vertical" />
                             <Popconfirm cancelText="取消" okText="确定" title="确定删除?" onConfirm={() => this.deleteConfirm(record)}>
                                 <a>删除</a>
                             </Popconfirm>
@@ -380,6 +384,7 @@ class tablesTkTask extends React.Component {
                             cancelText="取消" okText="确定"
                             onCancel={onCancel}
                             onOk={onCreate}
+                            maskClosable={false}
                         >
                             <Form layout="vertical">
                                 <FormItem label="食任务名称">
@@ -514,6 +519,7 @@ class tablesTkTask extends React.Component {
                             cancelText="取消" okText="确定"
                             onCancel={onCancel}
                             onOk={onCreate}
+                            maskClosable={false}
                         >
                             <Form layout="vertical">
                                 <FormItem label="任务名称">

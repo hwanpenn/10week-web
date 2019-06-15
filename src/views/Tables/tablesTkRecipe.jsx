@@ -83,7 +83,8 @@ class tablesTkRecipe extends React.Component {
     }
     handleSearch = (value) => {
         this.params.search=value
-        this.getTableData()
+        this.getTableData(this.params)
+        // this.props.getOtherTkRecipe(this.params);
     }
     handlePageChange = (value) => {
         this.params.pageNo=value
@@ -129,7 +130,10 @@ class tablesTkRecipe extends React.Component {
             if (err) {
                 return;
             }
-            values.url=this.url
+            if(this.url!==''){
+                values.url=this.url
+            }
+            // values.url=this.url
             values.id=this.state.recordAction._id
             values.content= values.content.toHTML()
             this.props.updateDataTkRecipe(values)
@@ -282,9 +286,9 @@ class tablesTkRecipe extends React.Component {
                             <a onClick={() => this.showModifyModal(record)} >修改</a>
                             <Divider type="vertical" />
 
-                            <a onClick={() => this.showModalRecipe(record)}>查看</a>
+                            {/* <a onClick={() => this.showModalRecipe(record)}>查看</a>
+                            <Divider type="vertical" /> */}
 
-                            <Divider type="vertical" />
                             <Popconfirm cancelText="取消" okText="确定" title="确定删除?" onConfirm={() => this.deleteConfirm(record)}>
                                 <a>删除</a>
                             </Popconfirm>
@@ -303,7 +307,8 @@ class tablesTkRecipe extends React.Component {
             class extends React.Component {
                 constructor(props) {
                     super(props);
-                    this.state = { editorState: BraftEditor.createEditorState(null) };
+                    this.state = {disabled:false,
+                        disabledCreate:false, editorState: BraftEditor.createEditorState(null) };
                   }
                   handleChange = editorState => {
                     this.setState({ editorState });
@@ -322,6 +327,7 @@ class tablesTkRecipe extends React.Component {
                 render() {
                     const { visible, onCancel, onCreate, form } = this.props;
                     const { getFieldDecorator } = form;
+                    let Obj = this
                     const extendControls = [
                         {
                           key: 'antd-uploader',
@@ -341,10 +347,17 @@ class tablesTkRecipe extends React.Component {
                         }
                       ]
                       const props = {
+                        accept:"video/mp4",
+                        disabled : this.state.disabledCreate,
                         name: 'file',
                         action: '/api/upload',
                         headers: {
                         //   authorization: 'authorization-text',
+                        },
+                        onRemove() {
+                            Obj.setState({
+                                disabledCreate:false
+                            })
                         },
                         onChange(info) {
                           if (info.file.status !== 'uploading') {
@@ -354,6 +367,9 @@ class tablesTkRecipe extends React.Component {
                             console.log(info.file.response)
                             thisTemp.url=info.file.response.data.url
                             message.success(`${info.file.name} 上传成功`);
+                            Obj.setState({
+                                disabledCreate:true
+                            })
                           } else if (info.file.status === 'error') {
                             message.error(`${info.file.name} 上传失败.`);
                           }
@@ -369,6 +385,7 @@ class tablesTkRecipe extends React.Component {
                             cancelText="取消" okText="确定"
                             onCancel={onCancel}
                             onOk={onCreate}
+                            maskClosable={false}
                         >
                             <Form layout="vertical">
                                 <FormItem label="食谱名称">
@@ -428,6 +445,10 @@ class tablesTkRecipe extends React.Component {
         );
         const CollectionModifyForm = Form.create()(
             class extends React.Component {
+                state={
+                    disabled:false,
+                    disabledCreate:false,
+                }
                 handleChange = (value) => {
                     console.log(`selected ${value}`);
                     this.props.form.setFieldsValue({
@@ -454,11 +475,17 @@ class tablesTkRecipe extends React.Component {
                 render() {
                     const { visible, onCancel, onCreate, form } = this.props;
                     const { getFieldDecorator } = form;
+                    let Obj = this
                     const props = {
                         name: 'file',
                         action: '/api/upload',
                         headers: {
                         //   authorization: 'authorization-text',
+                        },
+                        onRemove() {
+                            Obj.setState({
+                                disabledCreate:false
+                            })
                         },
                         onChange(info) {
                           if (info.file.status !== 'uploading') {
@@ -468,6 +495,9 @@ class tablesTkRecipe extends React.Component {
                             console.log(info.file.response)
                             thisTemp.url=info.file.response.data.url
                             message.success(`${info.file.name} 上传成功`);
+                            Obj.setState({
+                                disabledCreate:true
+                            })
                           } else if (info.file.status === 'error') {
                             message.error(`${info.file.name} 上传失败.`);
                           }
@@ -482,6 +512,7 @@ class tablesTkRecipe extends React.Component {
                             cancelText="取消" okText="确定"
                             onCancel={onCancel}
                             onOk={onCreate}
+                            maskClosable={false}
                         >
                             <Form layout="vertical">
                                 <FormItem label="食谱名称">

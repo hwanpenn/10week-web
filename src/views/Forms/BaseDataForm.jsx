@@ -44,7 +44,7 @@ Object.keys(extra).forEach((key) => {
   }
 });
 // import 'jsencrypt';
-class BaseDataPage extends React.Component {
+class BaseDataForm extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -150,7 +150,7 @@ onSegChange = (e) => {
   }
 
   getData = () => {
-    axios.get('/api/user/'+this.props.match.params.id
+    axios.get('/api/user/'+this.props.id
     ).then( (response) => {
     console.log(response.data.data)
       this.setState({
@@ -446,11 +446,11 @@ onSegChange = (e) => {
     }
   }
   
-  const WrappedBaseDataPage = Form.create({ name: 'validate_other' })(BaseDataPage);
+  const WrappedBaseDataForm = Form.create({ name: 'validate_other' })(BaseDataForm);
   
 
-// BaseDataPage.propTypes = {
+// BaseDataForm.propTypes = {
 //     classes: PropTypes.object.isRequired
 // };
 
-export default withStyles(mobilePageStyle)(WrappedBaseDataPage);
+export default withStyles(mobilePageStyle)(WrappedBaseDataForm);

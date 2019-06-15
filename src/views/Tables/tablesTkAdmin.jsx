@@ -69,7 +69,8 @@ class tablesTkAdmin extends React.Component {
     }
     handleSearch = (value) => {
         this.params.search=value
-        this.getTableData()
+        // this.getTableData()
+        this.props.getDataTkAdmin(this.params);
     }
     handlePageChange = (value) => {
         this.params.pageNo=value
@@ -235,6 +236,7 @@ class tablesTkAdmin extends React.Component {
                             cancelText="取消" okText="确定"
                             onCancel={onCancel}
                             onOk={onCreate}
+                            maskClosable={false}
                         >
                             <Form layout="vertical">
                                 <FormItem label="用户名">
@@ -304,6 +306,7 @@ class tablesTkAdmin extends React.Component {
                             cancelText="取消" okText="确定"
                             onCancel={onCancel}
                             onOk={onCreate}
+                            maskClosable={false}
                         >
                             <Form layout="vertical">
                                 <FormItem label="用户名">

@@ -75,7 +75,8 @@ class tablesTkVideo extends React.Component {
     }
     handleSearch = (value) => {
         this.params.search=value
-        this.getTableData()
+        // this.getTableData()
+        this.props.getDataTkVideo(this.params);
     }
     handlePageChange = (value) => {
         this.params.pageNo=value
@@ -117,9 +118,6 @@ class tablesTkVideo extends React.Component {
             values.id=this.state.recordAction._id
             values.url=this.url
             values.img=this.urlimg
-            console.log('values--------------')
-            console.log(this.urlimg)
-            console.log(values)
             this.props.updateDataTkVideo(values);
             form.resetFields();
             this.setState({ visibleModify: false });
@@ -131,6 +129,7 @@ class tablesTkVideo extends React.Component {
             if (err) {
                 return;
             }
+            // console.log(values)
             values.img=this.urlimg
             values.url=this.url
             this.props.createDataTkVideo(values)
@@ -280,6 +279,10 @@ class tablesTkVideo extends React.Component {
         
         const CollectionCreateForm = Form.create()(
             class extends React.Component {
+                state={
+                    disabled:false,
+                    disabledCreate:false,
+                }
                 handleChange = (value) => {
                     console.log(`selected ${value}`);
                     this.props.form.setFieldsValue({
@@ -294,12 +297,20 @@ class tablesTkVideo extends React.Component {
                 }
                 render() {
                     const { visible, onCancel, onCreate, form } = this.props;
+                    let Obj = this
                     const { getFieldDecorator } = form;
                     const props = {
+                        accept:"video/mp4",
+                        disabled : this.state.disabledCreate,
                         name: 'file',
                         action: '/api/upload',
                         headers: {
                         //   authorization: 'authorization-text',
+                        },
+                        onRemove() {
+                            Obj.setState({
+                                disabledCreate:false
+                            })
                         },
                         onChange(info) {
                           if (info.file.status !== 'uploading') {
@@ -309,16 +320,26 @@ class tablesTkVideo extends React.Component {
                             console.log(info.file.response.data.url)
                             thisTemp.url=info.file.response.data.url
                             message.success(`${info.file.name} 上传成功`);
+                            Obj.setState({
+                                disabledCreate:true
+                            })
                           } else if (info.file.status === 'error') {
                             message.error(`${info.file.name} 上传失败.`);
                           }
                         },
                       };
                       const propsimg = {
+                        accept:"video/png",
+                        disabled : this.state.disabled,
                         name: 'file',
                         action: '/api/upload',
                         headers: {
                         //   authorization: 'authorization-text',
+                        },
+                        onRemove() {
+                            Obj.setState({
+                                disabled:false
+                            })
                         },
                         onChange(info) {
                           if (info.file.status !== 'uploading') {
@@ -328,6 +349,9 @@ class tablesTkVideo extends React.Component {
                             console.log(info.file.response)
                             thisTemp.urlimg=info.file.response.data.url
                             message.success(`${info.file.name} 上传成功`);
+                            Obj.setState({
+                                disabled:true
+                            })
                           } else if (info.file.status === 'error') {
                             message.error(`${info.file.name} 上传失败.`);
                           }
@@ -342,6 +366,7 @@ class tablesTkVideo extends React.Component {
                             cancelText="取消" okText="确定"
                             onCancel={onCancel}
                             onOk={onCreate}
+                            maskClosable={false}
                         >
                             <Form layout="vertical">
                                 <FormItem label="视频名称">
@@ -352,12 +377,12 @@ class tablesTkVideo extends React.Component {
                                     )}
                                 </FormItem>
                                 <FormItem label="视频图片">
-                                    {getFieldDecorator('file', {
+                                    {getFieldDecorator('img', {
                                         rules: [{ required: false, message: '请选择标题图片!' }],
                                     })(
                                         <Upload {...propsimg}>
                                             <Button>
-                                            <Icon type="upload" /> 上传图片
+                                            <Icon type="upload" /> 上传图片(.png)
                                             </Button>
                                         </Upload>
                                     )}
@@ -370,12 +395,12 @@ class tablesTkVideo extends React.Component {
                                     )}
                                 </FormItem>
                                 <FormItem label="上传视频">
-                                    {getFieldDecorator('file', {
+                                    {getFieldDecorator('url', {
                                         rules: [{ required: false, message: '请输入新增用户描述!' }],
                                     })(
                                         <Upload {...props}>
                                             <Button>
-                                            <Icon type="upload" /> 上传视频
+                                            <Icon type="upload" /> 上传视频(.mp4)
                                             </Button>
                                         </Upload>
                                     )}
@@ -388,6 +413,10 @@ class tablesTkVideo extends React.Component {
         );
         const CollectionModifyForm = Form.create()(
             class extends React.Component {
+                state={
+                    disabled:false,
+                    disabledCreate:false,
+                }
                 handleChange = (value) => {
                     console.log(`selected ${value}`);
                     this.props.form.setFieldsValue({
@@ -403,11 +432,19 @@ class tablesTkVideo extends React.Component {
                 render() {
                     const { visible, onCancel, onCreate, form } = this.props;
                     const { getFieldDecorator } = form;
+                    let Obj = this
                     const props = {
+                        accept:"video/mp4",
+                        disabled : this.state.disabledCreate,
                         name: 'file',
                         action: '/api/upload',
                         headers: {
                         //   authorization: 'authorization-text',
+                        },
+                        onRemove() {
+                            Obj.setState({
+                                disabledCreate:false
+                            })
                         },
                         onChange(info) {
                           if (info.file.status !== 'uploading') {
@@ -417,16 +454,26 @@ class tablesTkVideo extends React.Component {
                             console.log(info.file.response.data.url)
                             thisTemp.url=info.file.response.data.url
                             message.success(`${info.file.name} 上传成功`);
+                            Obj.setState({
+                                disabledCreate:true
+                            })
                           } else if (info.file.status === 'error') {
                             message.error(`${info.file.name} 上传失败.`);
                           }
                         },
                       };
                     const propsimg = {
+                        accept:"video/png",
+                        disabled : this.state.disabled,
                         name: 'file',
                         action: '/api/upload',
                         headers: {
                         //   authorization: 'authorization-text',
+                        },
+                        onRemove() {
+                            Obj.setState({
+                                disabled:false
+                            })
                         },
                         onChange(info) {
                           if (info.file.status !== 'uploading') {
@@ -437,6 +484,9 @@ class tablesTkVideo extends React.Component {
                             // console.log(info.file.response.data.url)
                             thisTemp.urlimg=info.file.response.data.url
                             message.success(`${info.file.name} 上传成功`);
+                            Obj.setState({
+                                disabled:true
+                            })
                           } else if (info.file.status === 'error') {
                             message.error(`${info.file.name} 上传失败.`);
                           }
@@ -451,6 +501,7 @@ class tablesTkVideo extends React.Component {
                             cancelText="取消" okText="确定"
                             onCancel={onCancel}
                             onOk={onCreate}
+                            maskClosable={false}
                         >
                             <Form layout="vertical">
                                 <FormItem label="视频名称">
@@ -467,7 +518,7 @@ class tablesTkVideo extends React.Component {
                                     })(
                                         <Upload {...propsimg}>
                                             <Button>
-                                            <Icon type="upload" /> 上传图片
+                                            <Icon type="upload" /> 上传图片(.png)
                                             </Button>
                                         </Upload>
                                     )}
@@ -478,7 +529,7 @@ class tablesTkVideo extends React.Component {
                                     })(
                                         <Upload {...props}>
                                             <Button>
-                                            <Icon type="upload" /> 上传视频
+                                            <Icon type="upload" /> 上传视频(.mp4)
                                             </Button>
                                         </Upload>
                                     )}

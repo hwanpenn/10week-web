@@ -90,7 +90,7 @@ class LoginPage extends React.Component {
           password: password,
         }
       ).then( (response) => {
-            console.log(response)
+            console.log(response.data)
             response=response.data
             if(response.code===0){
                 // const uuid = thisTemp.guid();
@@ -119,8 +119,8 @@ class LoginPage extends React.Component {
                 }
                 
                 // document.getElementById("layui-layer2").style.display='block'
-            }else {
-                message.info(response.data.msg);
+            }else if(response.code===404){
+                message.info('用户名密码错误');
             }
   
           })

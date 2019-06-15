@@ -84,17 +84,26 @@ class NewsPage extends React.Component {
     handleChange = name => event => {
 
     };
+    sendData = (router)=> {
+        if (window.originalPostMessage) {
+            window.postMessage(router);
+        } else {
+            throw Error('postMessage接口还未注入');
+        }
+      }
     goto = () => {
-        const page = this.state.page
+        // const page = this.state.page
         // this.props.history.push("/cms/home/tables/killgroup?page="+page);
-        this.props.history.push("/mobile/videopagelist");
+        // this.props.history.push("/mobile/videopagelist");
+        this.sendData('/mobile/videopagelist')
         // this.setState({ visible: true });
     }
     goBack = () => {
-        // this.sendData('Index')
+        // this.sendData('/mobile/newspagelist')
+        this.props.history.push("/mobile/newspagelist");
     //   const page = this.state.page
       // this.props.history.push("/cms/home/tables/killgroup?page="+page);
-      this.props.history.push("/mobile/newspagelist");
+    //   this.props.history.push("/mobile/newspagelist");
       // this.setState({ visible: true });
     }
 

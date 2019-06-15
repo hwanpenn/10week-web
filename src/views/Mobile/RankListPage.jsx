@@ -16,6 +16,7 @@ const fakeDataUrl = 'https://randomuser.me/api/?results=5&inc=name,gender,email,
 message.config({
   top: 100
 });
+let timer
 class RankListPage extends React.Component {
   state = {
     data: [{
@@ -40,10 +41,16 @@ class RankListPage extends React.Component {
   }
 
   componentDidMount() {
-    if(this.state.height===0){
-      window.location.reload()
-    }
+    timer = window.setInterval(this.setHeight, 200);
     this.fetchData()
+  }
+  setHeight = () =>{
+    if(document.documentElement.clientHeight!==0){
+      this.setState({
+        height:document.documentElement.clientHeight
+      })
+      window.clearTimeout(timer);   
+    }
   }
 
   fetchData = () => {
@@ -100,10 +107,11 @@ class RankListPage extends React.Component {
     // this.props.history.push("/mobile/ranklistpage");
 }
 goto = () => {
+  this.sendData('/mobile/newspagelist')
   // this.fetchData()
     // const page = this.state.page
     // this.props.history.push("/cms/home/tables/killgroup?page="+page);
-    this.props.history.push("/mobile/newspagelist");
+    // this.props.history.push("/mobile/newspagelist");
     // this.setState({ visible: true });
 }
 
@@ -151,11 +159,11 @@ goto = () => {
             }) => (
               <List.Item key={item===undefined?'':item._id} >
                 <List.Item.Meta
-                  avatar={<Avatar  >{item===undefined?'':item.realName}</Avatar>}
+                  avatar={<Avatar style={{ backgroundColor: '#f56a00' }} >{item===undefined?'':item.realName}</Avatar>}
                   title={<a href="">{item===undefined?'':item.realName}</a>}
                   description={"参加十周挑战"+item===undefined?'':item.vipDay+"天"}
                 />
-                <div style={{marginRight:20}}>{"减脂"+item===undefined?'':item.lose+"千克"}</div>
+                <div style={{marginRight:20}}>一共减脂{item===undefined?'':item.lose+"千克"}</div>
                 <div><Tag onClick={()=>this.handlechart(item===undefined?'':item._id)} color="magenta">详细数据</Tag></div>
               </List.Item>
             )}

@@ -1,3 +1,6 @@
+import Loadable from 'react-loadable';
+import Loading from './loading'
+import LockOpen from "@material-ui/icons/LockOpen";
 import AsyncComponent from './asyncComponent.jsx'
 // import ChartPage from "views/Mobile/ChartPage.jsx";
 // import PicturePage from "views/Mobile/PicturePage.jsx";
@@ -13,11 +16,9 @@ import AsyncComponent from './asyncComponent.jsx'
 // import VideoListPage from "views/Mobile/VideoListPage.jsx";
 // import VideoPage from "views/Mobile/VideoPage.jsx";
 // import Fingerprint from "@material-ui/icons/Fingerprint";
-import LockOpen from "@material-ui/icons/LockOpen";
 // import VipDataPage from "../views/Mobile/VipDataPage";
 // import FaceIdPage from "views/LoginPages/FaceIdPage";
-import Loadable from 'react-loadable';
-import Loading from './loading'
+
 
 const ChartPage = Loadable({
     loader: () => import(/* webpackChunkName: "ChartPage" */ "views/Mobile/ChartPage.jsx"),
