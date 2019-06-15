@@ -170,7 +170,7 @@ class tablesTkUser extends React.Component {
         const params = {
             id:record._id,
         }
-        this.props.history.push("/mobile/vipdatalistpage/"+record._id);
+        this.props.history.push("/cms/home/tables/TkVipData?userID="+record._id+"&userName="+record._id);
         // this.props.deleteDataTkUser(params)
     }
     handleChart = (record) => {
@@ -279,8 +279,8 @@ class tablesTkUser extends React.Component {
                     return (
                         <span>
                             {/* <a onClick={() => this.handleBase(record)} >基础</a>
-                            <Divider type="vertical" />
-                            <a onClick={() => this.handleList(record)} >列表</a>
+                            <Divider type="vertical" /> */}
+                            {/* <a onClick={() => this.handleList(record)} >{record.vip==="false"?"":"打卡数据"}</a>
                             <Divider type="vertical" /> */}
                             {/* <a onClick={() => this.handleChart(record)} >可视化</a>
                             <Divider type="vertical" /> */}

@@ -228,27 +228,29 @@ const dashRoutes2 = [
     //         }
     //     ]
     // },
-    {
-        collapse: true,
-        path: "/cms/home/tables",
-        name: "健身数据",
-        state: "openTables5",
-        icon: ViewColumn,
-        views: [
-            {
-            path: "/cms/home/tables/TkBaseData",
-            name: "基础数据",
-            mini: "B",
-            component: tablesTkBaseData
-            },
-            {
-            path: "/cms/home/tables/TkVipData",
-            name: "会员数据",
-            mini: "B",
-            component: tablesTkVipData
-            }
-        ]
-    },
+    // {
+    //     collapse: true,
+    //     path: "/cms/home/tables",
+    //     name: "健身数据",
+    //     state: "openTables5",
+    //     icon: ViewColumn,
+    //     status:'hidden',
+    //     views: [
+    //         {
+    //         path: "/cms/home/tables/TkBaseData",
+    //         name: "基础数据",
+    //         mini: "B",
+    //         status:'hidden',
+    //         component: tablesTkBaseData
+    //         },
+    //         {
+    //         path: "/cms/home/tables/TkVipData/:id",
+    //         name: "打卡数据",
+    //         mini: "B",
+    //         component: tablesTkVipData
+    //         }
+    //     ]
+    // },
     // {
     //     collapse: true,
     //     path: "/cms/home/tables",

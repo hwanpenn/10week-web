@@ -448,7 +448,6 @@ onSegChange = (e) => {
   
   const WrappedBaseDataPage = Form.create({ name: 'validate_other' })(BaseDataPage);
   
-
 // BaseDataPage.propTypes = {
 //     classes: PropTypes.object.isRequired
 // };

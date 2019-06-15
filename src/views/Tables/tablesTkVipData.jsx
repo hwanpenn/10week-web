@@ -174,12 +174,12 @@ class tablesTkVipData extends React.Component {
         let thisTemp = this
         const { classes } = this.props;
         const columns = [{
-            title: '用户名',
-            dataIndex: 'user',
-            key: 'user',
+            title: '标签',
+            dataIndex: 'name',
+            key: 'name',
             fixed: 'left',
             width: '100px',
-            render: text => <a >{text===undefined?'':text.realName}</a>,
+            render: text => <a >{text===undefined?'':text}</a>,
         }, {
             title: '日期',
             dataIndex: 'createdAt',
@@ -658,12 +658,12 @@ class tablesTkVipData extends React.Component {
                     onCancel={this.handleCancelModify}
                     onCreate={this.handleModify}
                 />
-                {/* <CollectionModifyForm
+                <CollectionModifyForm
                     wrappedComponentRef={this.saveFormRefModify}
                     visible={this.state.visibleModify}
                     onCancel={this.handleCancelModify}
                     onCreate={this.handleModify}
-                /> */}
+                />
             </GridContainer>
         );
     }
